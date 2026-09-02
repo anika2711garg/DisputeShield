@@ -1,0 +1,3 @@
+-- Prefer `npm run seed` for the local demo store.
+-- When using hosted Supabase, import organisation/profile rows from the generated .data/store.json
+-- and keep organisation_id assigned server-side.
