@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import type { UserRole } from "@/types/domain";
 import { EvidencePreviewDrawer } from "./evidence-preview-drawer";
 import { EvidenceUpload } from "./evidence-upload";
+import { ConfirmDecisionDialog } from "./confirm-decision-dialog";
 
 export function ReviewWorkspace({ bundle, role }: { bundle: CaseBundle; role: UserRole }) {
   const router = useRouter();
@@ -84,11 +85,11 @@ export function ReviewWorkspace({ bundle, role }: { bundle: CaseBundle; role: Us
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-semibold">Review workspace</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Review workspace</h1>
         <p className="text-muted">{bundle.dispute.id} · {formatInr(bundle.dispute.amount)}</p>
       </div>
       <div className="grid gap-4 xl:grid-cols-[260px_1fr_320px]">
-        <aside className="space-y-3 rounded-2xl bg-surface p-4 hairline">
+        <aside className="space-y-3 rounded-[14px] bg-surface p-4 hairline">
           <div className="text-xs uppercase text-muted">Case</div>
           <div>{bundle.customer?.name}</div>
           <div className="text-sm text-muted">{bundle.order?.externalId}</div>
@@ -145,37 +146,40 @@ export function ReviewWorkspace({ bundle, role }: { bundle: CaseBundle; role: Us
           </div>
         </aside>
       </div>
-      <div className="sticky bottom-3 flex flex-wrap gap-2 rounded-2xl bg-surface p-3 hairline">
-        <Button variant="secondary" onClick={saveDraft}>Save Draft</Button>
-        <Button disabled={!canAct} onClick={() => setContestOpen(true)}>Approve & Contest</Button>
-        <Button variant="danger" disabled={!canAct} onClick={() => setAcceptOpen(true)}>Accept Dispute</Button>
-        {!canAct && <Badge tone="amber">Analysts can prepare, not submit</Badge>}
+      <div className="sticky bottom-3 space-y-3 rounded-[14px] bg-surface p-4 hairline">
+        <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted">Final decision</div>
+        <label className="flex items-start gap-2 text-sm">
+          <input type="checkbox" className="mt-1" checked={ack} onChange={(e) => setAck(e.target.checked)} />
+          I have reviewed the evidence and understand this action.
+        </label>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="secondary" onClick={saveDraft}>Save Draft</Button>
+          <Button disabled={!canAct || !ack} onClick={() => setContestOpen(true)}>Contest Chargeback</Button>
+          <Button variant="danger" disabled={!canAct || !ack} onClick={() => setAcceptOpen(true)}>Accept Dispute</Button>
+          {!canAct && <Badge tone="amber">Analysts can prepare, not submit</Badge>}
+        </div>
+        <p className="text-xs text-muted">Razorpay writes disabled — demo action only.</p>
       </div>
 
       {contestOpen && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-surface p-6 hairline">
-            <h3 className="text-xl font-semibold">Submit evidence to Razorpay</h3>
-            <p className="mt-3 text-sm text-muted">Dispute {bundle.dispute.id} · {formatInr(bundle.dispute.amount)} · {selected.length} documents. This action sends the case for review.</p>
-            <label className="mt-4 flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={ack} onChange={(e) => setAck(e.target.checked)} />
-              I reviewed the evidence and approve this contest.
-            </label>
-            <div className="mt-6 flex gap-2">
-              <Button variant="secondary" onClick={() => setContestOpen(false)}>Cancel</Button>
-              <Button disabled={!ack} onClick={submit}>Submit Contest</Button>
-            </div>
-          </div>
-        </div>
+        <ConfirmDecisionDialog
+          action="contest"
+          amount={bundle.dispute.amount}
+          caseId={bundle.dispute.id}
+          onCancel={() => setContestOpen(false)}
+          onConfirm={submit}
+        />
       )}
 
       {acceptOpen && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-surface p-6 hairline">
-            <h3 className="text-xl font-semibold text-danger">Accepting this dispute is irreversible.</h3>
-            <p className="mt-3 text-sm text-muted">Type ACCEPT to continue.</p>
-            <input className="mt-4 h-10 w-full rounded-lg bg-sunken px-3 hairline" value={typed} onChange={(e) => setTyped(e.target.value)} />
-            <div className="mt-6 flex gap-2">
+        <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/45 p-4">
+          <div className="w-full max-w-md rounded-[16px] bg-surface p-6 shadow-[var(--shadow)]">
+            <h3 className="text-lg font-semibold text-danger">Accept this dispute?</h3>
+            <p className="mt-3 text-sm text-muted">DisputeShield will not take this action automatically. You are making the final decision.</p>
+            <p className="mt-2 text-sm">Type ACCEPT to continue. {formatInr(bundle.dispute.amount)}</p>
+            <input className="mt-4 h-10 w-full rounded-[10px] bg-white px-3 hairline" value={typed} onChange={(e) => setTyped(e.target.value)} />
+            <div className="mt-4 rounded-[10px] bg-amber/8 px-3 py-2 text-xs font-medium text-amber">Razorpay writes disabled — demo action only</div>
+            <div className="mt-6 flex justify-end gap-2">
               <Button variant="secondary" onClick={() => setAcceptOpen(false)}>Cancel</Button>
               <Button variant="danger" disabled={typed !== "ACCEPT"} onClick={accept}>Accept Dispute</Button>
             </div>

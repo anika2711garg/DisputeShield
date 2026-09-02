@@ -9,6 +9,7 @@ import type { SessionUser } from "@/lib/auth/session";
 import { writeAudit } from "./audit-service";
 import { getDisputeBundle } from "./dispute-service";
 import { notify } from "./notification-service";
+import { getWorkspaceSettings } from "./settings-service";
 
 export function saveContestDraft(user: SessionUser, disputeId: string, selectedEvidenceIds: string[], summary: string) {
   const bundle = getDisputeBundle(user.organizationId, disputeId);
@@ -51,14 +52,17 @@ export async function submitContest(user: SessionUser, disputeId: string, select
     return { duplicate: true, simulated: existing.status === "simulated", approval: existing };
   }
 
+  const armed = getWorkspaceSettings().writeArmed;
   const adapter = getRazorpayAdapter();
-  const result = await adapter.contestDispute(bundle.dispute.razorpayDisputeId, {
-    amount: bundle.dispute.amount,
-    summary: bundle.draft?.summary ?? bundle.investigation?.summary ?? "Merchant contest package",
-    documentIds: selectedEvidenceIds,
-    action: "submit",
-  });
-  const simulated = isSimulatedWrite(result);
+  const result = armed
+    ? await adapter.contestDispute(bundle.dispute.razorpayDisputeId, {
+        amount: Math.round(bundle.dispute.amount * 100),
+        summary: bundle.draft?.summary ?? bundle.investigation?.summary ?? "Merchant contest package",
+        documentIds: selectedEvidenceIds,
+        action: "submit",
+      })
+    : { simulated: true as const, message: "Simulation mode — no financial action was sent to Razorpay." };
+  const simulated = !armed || isSimulatedWrite(result);
   const approval = {
     id: createId("apr"),
     organizationId: user.organizationId,
@@ -105,9 +109,12 @@ export async function acceptDispute(user: SessionUser, disputeId: string, typed:
   const existing = bundle.approvals.find((item) => item.action === "accept");
   if (existing) return { duplicate: true, simulated: existing.status === "simulated", approval: existing };
 
+  const armed = getWorkspaceSettings().writeArmed;
   const adapter = getRazorpayAdapter();
-  const result = await adapter.acceptDispute(bundle.dispute.razorpayDisputeId);
-  const simulated = isSimulatedWrite(result);
+  const result = armed
+    ? await adapter.acceptDispute(bundle.dispute.razorpayDisputeId)
+    : { simulated: true as const, message: "Simulation mode — no financial action was sent to Razorpay." };
+  const simulated = !armed || isSimulatedWrite(result);
   const approval = {
     id: createId("apr"),
     organizationId: user.organizationId,

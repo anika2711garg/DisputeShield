@@ -1,7 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "motion/react";
+
+const LABEL_MAP: Record<string, string> = {
+  "Payment validity": "Payment verified",
+  "Billing / invoice": "Billing match",
+  "Shipping / service proof": "Shipping match",
+  "Delivery / completion proof": "Delivery proof",
+  "Customer acknowledgement": "Customer acknowledgement",
+  "Evidence consistency": "Evidence consistency",
+};
 
 export function ReadinessRing({
   score,
@@ -14,62 +22,66 @@ export function ReadinessRing({
   missing: number;
   breakdown?: { label: string; awarded: number; max: number }[];
 }) {
-  const [open, setOpen] = useState(false);
-  const r = 54;
+  const r = 62;
   const c = 2 * Math.PI * r;
   const offset = c - (score / 100) * c;
-  const strength = score >= 80 ? "Strong" : score >= 50 ? "Moderate" : "Weak";
+  const strength = score >= 80 ? "Strong evidence" : score >= 50 ? "Moderate evidence" : "Weak evidence";
+  const stroke = score >= 80 ? "var(--emerald)" : score >= 50 ? "var(--amber)" : "var(--danger)";
 
   return (
-    <button type="button" onClick={() => setOpen((v) => !v)} className="text-left">
-      <span className="sr-only">Case readiness {score} out of 100</span>
+    <div>
       <div className="flex items-center gap-6">
-        <svg width="140" height="140" viewBox="0 0 140 140">
-          <circle cx="70" cy="70" r={r} fill="none" stroke="var(--border)" strokeWidth="10" />
+        <svg width="156" height="156" viewBox="0 0 156 156" aria-label={`Evidence score ${score} of 100`}>
+          <circle cx="78" cy="78" r={r} fill="none" stroke="var(--border)" strokeWidth="11" />
           <motion.circle
-            cx="70"
-            cy="70"
+            cx="78"
+            cy="78"
             r={r}
             fill="none"
-            stroke="var(--cyan)"
-            strokeWidth="10"
+            stroke={stroke}
+            strokeWidth="11"
             strokeLinecap="round"
             strokeDasharray={c}
             initial={{ strokeDashoffset: c }}
             animate={{ strokeDashoffset: offset }}
-            transform="rotate(-90 70 70)"
+            transition={{ duration: 0.7 }}
+            transform="rotate(-90 78 78)"
           />
-          <text x="70" y="66" textAnchor="middle" fill="var(--text)" fontSize="22" fontWeight="600">
+          <text x="78" y="74" textAnchor="middle" fill="var(--text)" fontSize="28" fontWeight="600">
             {score}
           </text>
-          <text x="70" y="86" textAnchor="middle" fill="var(--text-muted)" fontSize="10">
+          <text x="78" y="94" textAnchor="middle" fill="var(--text-muted)" fontSize="11">
             / 100
           </text>
         </svg>
         <div>
-          <div className="text-sm text-muted">Case readiness</div>
-          <div className="mt-2 text-sm">Evidence: {strength}</div>
-          <div className="text-sm">AI confidence: {Math.round(confidence * 100)}%</div>
-          <div className="text-sm">Missing critical documents: {missing}</div>
+          <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted">Rules-calculated</div>
+          <div className="mt-1 text-lg font-semibold">{strength}</div>
+          <div className="mt-1 text-sm text-muted">AI confidence {Math.round(confidence * 100)}% · missing {missing}</div>
         </div>
       </div>
-      {open && breakdown && (
-        <div className="mt-4 space-y-2">
+      {breakdown && (
+        <div className="mt-5 space-y-2.5">
           {breakdown.map((item) => (
             <div key={item.label}>
-              <div className="flex justify-between text-xs text-muted">
-                <span>{item.label}</span>
-                <span>
+              <div className="flex justify-between text-xs">
+                <span>{LABEL_MAP[item.label] ?? item.label}</span>
+                <span className="font-mono text-muted">
                   {item.awarded}/{item.max}
                 </span>
               </div>
-              <div className="mt-1 h-1.5 rounded-full bg-sunken">
-                <div className="h-1.5 rounded-full bg-cyan" style={{ width: `${(item.awarded / item.max) * 100}%` }} />
+              <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-sunken">
+                <motion.div
+                  className="h-1.5 rounded-full bg-cyan"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(item.awarded / item.max) * 100}%` }}
+                  transition={{ duration: 0.55, delay: 0.15 }}
+                />
               </div>
             </div>
           ))}
         </div>
       )}
-    </button>
+    </div>
   );
 }

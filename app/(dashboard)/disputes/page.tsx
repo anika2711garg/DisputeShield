@@ -4,6 +4,8 @@ import { requireSession } from "@/lib/auth/session";
 import { listDisputes } from "@/lib/services/dispute-service";
 import { DisputeFilters } from "@/components/disputes/filters";
 import { DisputeTable } from "@/components/disputes/table";
+import { PageHeader } from "@/components/ui/page-header";
+import { EmptyState } from "@/components/ui/empty-state";
 
 const PAGE_SIZE = 10;
 
@@ -14,13 +16,24 @@ export default async function DisputesPage({
 }) {
   const user = await requireSession();
   const params = await searchParams;
-  const items = listDisputes(user.organizationId, {
+  let items = listDisputes(user.organizationId, {
     q: params.q,
     status: params.status,
     reason: params.reason,
     recommendation: params.recommendation,
     phase: params.phase,
     view: params.view,
+    minScore: params.minScore ? Number(params.minScore) : undefined,
+    rangeDays: params.range ? Number(params.range) : undefined,
+  });
+  const sort = params.sort ?? "deadline";
+  const dir = params.dir === "asc" ? 1 : -1;
+  items = [...items].sort((a, b) => {
+    const av = sortValue(a, sort);
+    const bv = sortValue(b, sort);
+    if (av < bv) return -1 * dir;
+    if (av > bv) return 1 * dir;
+    return 0;
   });
   const requested = Math.max(1, Number(params.page ?? "1") || 1);
   const pages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
@@ -35,34 +48,52 @@ export default async function DisputesPage({
     reason: item.reasonDescription,
     phase: item.phase,
     score: item.recommendation?.score,
+    aiRecommendation: item.recommendation?.modelRecommendation,
+    rulesRecommendation: item.recommendation?.rulesRecommendation,
     recommendation: item.recommendation?.finalRecommendation,
     confidence: item.recommendation?.confidence,
     respondBy: item.respondBy,
     status: item.status,
+    reviewer: item.rawData.hero === true ? "Aanya Mehta" : undefined,
+    razorpayDisputeId: item.razorpayDisputeId,
+    evidenceCount: item.evidenceCount,
   }));
 
   return (
     <div className="space-y-6">
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-semibold">Disputes</h1>
-          <p className="mt-2 text-muted">{items.length} cases in this view</p>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Queue"
+        title="Disputes"
+        description={`Investigate, prioritize, and resolve ${items.length} payment disputes before their response deadlines.`}
+      />
       <Suspense>
         <DisputeFilters />
       </Suspense>
       {items.length === 0 ? (
-        <div className="rounded-2xl bg-surface p-12 text-center hairline">
-          <p className="text-lg font-medium">No disputes yet.</p>
-          <p className="mt-2 text-muted">Connect Razorpay or replay a demo dispute.</p>
-          <Link href="/demo" className="mt-4 inline-block text-cyan">
-            Open Demo Center
-          </Link>
-        </div>
+        <EmptyState
+          title="No disputes yet."
+          body="Connect Razorpay or replay a demo dispute."
+          action={
+            <Link href="/demo" className="text-sm text-cyan">
+              Open Demo Center
+            </Link>
+          }
+        />
       ) : (
         <DisputeTable rows={rows} total={items.length} />
       )}
     </div>
   );
+}
+
+function sortValue(item: ReturnType<typeof listDisputes>[number], sort: string): string | number {
+  if (sort === "amount") return item.amount;
+  if (sort === "score") return item.recommendation?.score ?? -1;
+  if (sort === "customer") return item.customer?.name ?? "";
+  if (sort === "reason") return item.reasonDescription;
+  if (sort === "status") return item.status;
+  if (sort === "ai") return item.recommendation?.modelRecommendation ?? "";
+  if (sort === "rules") return item.recommendation?.rulesRecommendation ?? "";
+  if (sort === "deadline") return item.respondBy ?? "";
+  return item.id;
 }

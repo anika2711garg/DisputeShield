@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
   description:
     "DisputeShield investigates Razorpay payment disputes, assembles merchant evidence and recommends the safest response — while keeping every financial decision human-approved.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/favicon.svg", apple: "/brand-logo.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

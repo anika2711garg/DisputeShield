@@ -8,6 +8,7 @@ export type RecommendationInput = {
   shipmentNeverShipped?: boolean;
   fullyRefunded?: boolean;
   conflicting?: boolean;
+  contestThreshold?: number;
 };
 
 export type RecommendationResult = {
@@ -38,7 +39,7 @@ export function recommendAction(input: RecommendationInput): RecommendationResul
   } else if (input.score.missingCritical.length > 0) {
     rules = "human_review";
     overrides.push(`Missing critical evidence: ${input.score.missingCritical.join(", ")}.`);
-  } else if (input.score.total >= 80) {
+  } else if (input.score.total >= (input.contestThreshold ?? 80)) {
     rules = "contest";
   } else if (input.score.total >= 50) {
     rules = "human_review";

@@ -4,9 +4,11 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
-import { Shield } from "lucide-react";
+import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { BrandLogo } from "@/components/brand/logo";
+import { ThemeSwitch } from "@/components/layout/theme-switch";
 
 export default function LoginPage() {
   return (
@@ -25,9 +27,15 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="grid min-h-screen place-items-center px-4">
-      <form
-        className="w-full max-w-md rounded-3xl bg-surface p-8 hairline"
+    <div className="aurora app-grid grid min-h-screen place-items-center px-4">
+      <div className="absolute right-4 top-4 z-20">
+        <ThemeSwitch />
+      </div>
+      <motion.form
+        initial={{ opacity: 0, y: 18, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 w-full max-w-md rounded-[16px] bg-surface p-8 shadow-[var(--shadow)] hairline"
         onSubmit={async (event) => {
           event.preventDefault();
           setLoading(true);
@@ -45,11 +53,11 @@ function LoginForm() {
           router.push((next || "/dashboard") as Route);
         }}
       >
-        <div className="mb-6 flex items-center gap-2 text-lg font-semibold">
-          <Shield className="size-5 text-cyan" /> DisputeShield
+        <div className="mb-6">
+          <BrandLogo size={32} />
         </div>
-        <h1 className="text-2xl font-semibold">Sign in</h1>
-        <p className="mt-2 text-sm text-muted">Demo auth is enabled until Supabase is connected.</p>
+        <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
+        <p className="mt-2 text-sm text-muted">Demo auth until Supabase is connected. AI investigates. Humans decide.</p>
         <label className="mt-6 block text-sm">Email</label>
         <Input className="mt-1" value={email} onChange={(e) => setEmail(e.target.value)} />
         <label className="mt-4 block text-sm">Password</label>
@@ -64,7 +72,7 @@ function LoginForm() {
         <p className="mt-4 text-sm text-muted">
           No account? <Link href="/signup" className="text-cyan">Create one</Link>
         </p>
-      </form>
+      </motion.form>
     </div>
   );
 }

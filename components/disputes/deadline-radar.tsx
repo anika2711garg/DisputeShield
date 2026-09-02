@@ -18,7 +18,7 @@ export function DeadlineRadar({ respondBy }: { respondBy?: string }) {
   if (remaining <= 0) return <div className="text-sm text-danger">Deadline passed</div>;
   const hours = Math.floor(remaining / 3_600_000);
   const minutes = Math.floor((remaining % 3_600_000) / 60_000);
-  const tone = hours < 6 ? "text-danger" : hours < 24 ? "text-amber" : "text-cyan";
+  const tone = hours < 6 ? "text-danger" : hours < 24 ? "text-amber" : "text-foreground";
   return (
     <div>
       <div className="text-xs uppercase tracking-wide text-muted">Respond by</div>

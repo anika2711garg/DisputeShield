@@ -210,9 +210,22 @@ export type Dispute = {
   phase: DisputePhase;
   status: DisputeStatus;
   respondBy?: string;
+  assigneeId?: string;
   rawData: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
+};
+
+export type WorkspaceSettings = {
+  writeArmed: boolean;
+  contestThreshold: number;
+  autoAssign: boolean;
+};
+
+export const DEFAULT_WORKSPACE_SETTINGS: WorkspaceSettings = {
+  writeArmed: false,
+  contestThreshold: 80,
+  autoAssign: false,
 };
 
 export type EvidenceItem = {
@@ -391,6 +404,7 @@ export type AppStore = {
   evaluationRuns: EvaluationRun[];
   notifications: Notification[];
   contestDrafts: ContestDraft[];
+  settings: WorkspaceSettings;
 };
 
 export function emptyStore(): AppStore {
@@ -419,5 +433,6 @@ export function emptyStore(): AppStore {
     evaluationRuns: [],
     notifications: [],
     contestDrafts: [],
+    settings: { ...DEFAULT_WORKSPACE_SETTINGS },
   };
 }

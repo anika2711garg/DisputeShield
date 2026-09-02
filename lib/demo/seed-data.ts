@@ -283,6 +283,7 @@ function addHeroCase(store: AppStore): void {
     phase: "ready",
     status: "action_required",
     respondBy: iso(27, 18),
+    assigneeId: USERS.admin.id,
     rawData: { hero: true },
     createdAt: iso(24, 10),
     updatedAt: iso(24, 10),

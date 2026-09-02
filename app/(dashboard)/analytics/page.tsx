@@ -1,36 +1,58 @@
+import Link from "next/link";
 import { requireSession } from "@/lib/auth/session";
 import { analyticsPage } from "@/lib/services/analytics-service";
 import { formatCompactInr } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { MetricCard } from "@/components/ui/metric-card";
 import { DashboardCharts } from "@/components/dashboard/charts";
 
-export default async function AnalyticsPage() {
+export default async function AnalyticsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}) {
   const user = await requireSession();
+  const params = await searchParams;
+  const range = params.range ?? "30";
   const data = analyticsPage(user.organizationId);
-  const rows = [
-    ["Disputes received", String(data.received)],
-    ["Amount disputed", formatCompactInr(data.amountDisputed)],
-    ["Amount contested", formatCompactInr(data.amountContested)],
-    ["Amount accepted", formatCompactInr(data.amountAccepted)],
-    ["Amount won", formatCompactInr(data.amountWon)],
-    ["Amount lost", formatCompactInr(data.amountLost)],
-    ["Potential recovered", formatCompactInr(data.recovered)],
-    ["Median evidence score", String(data.medianScore)],
-    ["Human review", `${data.humanReviewPct}%`],
-  ];
+  const volume = range === "7" ? data.volume.slice(-7) : range === "90" ? data.volume : data.volume.slice(-14);
+
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-semibold">Analytics</h1>
-      <div className="grid gap-3 md:grid-cols-3">
-        {rows.map(([label, value]) => (
-          <Card key={label}>
-            <div className="text-xs uppercase text-muted">{label}</div>
-            <div className="mt-2 text-2xl font-semibold">{value}</div>
-          </Card>
-        ))}
+      <PageHeader
+        eyebrow="Ledger"
+        title="Analytics"
+        description="Volume, amounts disputed, evidence strength, and the contest funnel — presentation-ready."
+        actions={
+          <div className="flex gap-2">
+            {[
+              ["7", "7 days"],
+              ["30", "30 days"],
+              ["90", "90 days"],
+            ].map(([id, label]) => (
+              <Link
+                key={id}
+                href={`/analytics?range=${id}`}
+                className={`rounded-full px-3 py-1 text-xs hairline ${range === id ? "bg-cyan text-white" : "bg-white"}`}
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+        }
+      />
+      <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-4">
+        <MetricCard label="Disputes received" value={String(data.received)} />
+        <MetricCard label="Amount disputed" value={formatCompactInr(data.amountDisputed)} />
+        <MetricCard label="Amount contested" value={formatCompactInr(data.amountContested)} />
+        <MetricCard label="Amount won" value={formatCompactInr(data.amountWon)} />
+        <MetricCard label="Win rate" value={`${data.winRate}%`} />
+        <MetricCard label="Median evidence score" value={String(data.medianScore)} />
+        <MetricCard label="Human review" value={`${data.humanReviewPct}%`} />
+        <MetricCard label="Recovered" value={formatCompactInr(data.recovered)} />
       </div>
       <DashboardCharts
-        volume={data.volume}
+        volume={volume}
         reasons={data.reasons}
         strength={data.strengthBuckets}
         funnel={[

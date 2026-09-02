@@ -54,6 +54,19 @@ describe("recommendation rules", () => {
     expect(rec.rulesRecommendation).toBe("accept");
   });
 
+  it("respects a higher contest threshold", () => {
+    const score = {
+      total: 75,
+      dimensions: [],
+      penalties: [],
+      missingCritical: [],
+    };
+    const loose = recommendAction({ score, modelRecommendation: "contest", modelConfidence: 0.9, contestThreshold: 70 });
+    const tight = recommendAction({ score, modelRecommendation: "contest", modelConfidence: 0.9, contestThreshold: 90 });
+    expect(loose.rulesRecommendation).toBe("contest");
+    expect(tight.rulesRecommendation).toBe("human_review");
+  });
+
   it("accepts never shipped", () => {
     const score = scoreEvidence({
       reason: "product_not_received",

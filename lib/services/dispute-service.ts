@@ -23,6 +23,7 @@ export type DisputeFilters = {
   maxScore?: number;
   minAmount?: number;
   maxAmount?: number;
+  rangeDays?: number;
 };
 
 export type DisputeListItem = Dispute & {
@@ -108,12 +109,18 @@ function matches(item: DisputeListItem, filters: DisputeFilters): boolean {
   if (filters.maxScore !== undefined && score > filters.maxScore) return false;
   if (filters.minAmount !== undefined && item.amount < filters.minAmount) return false;
   if (filters.maxAmount !== undefined && item.amount > filters.maxAmount) return false;
+  if (filters.rangeDays) {
+    const cutoff = Date.now() - filters.rangeDays * 86_400_000;
+    if (new Date(item.createdAt).getTime() < cutoff) return false;
+  }
   if (filters.view === "needs-attention" && !["action_required", "open"].includes(item.status)) return false;
   if (filters.view === "contest-ready" && item.recommendation?.finalRecommendation !== "contest") return false;
   if (filters.view === "human-review" && item.recommendation?.finalRecommendation !== "human_review") return false;
   if (filters.view === "under-review" && item.status !== "under_review") return false;
   if (filters.view === "won" && item.status !== "won") return false;
   if (filters.view === "lost" && item.status !== "lost") return false;
+  if (filters.view === "disagreement" && !(item.recommendation && item.recommendation.modelRecommendation !== item.recommendation.rulesRecommendation)) return false;
+  if (filters.view === "unassigned" && item.assigneeId) return false;
   if (filters.q) {
     const q = filters.q.toLowerCase();
     const haystack = [
@@ -166,6 +173,36 @@ export function searchGlobal(organizationId: string, q: string) {
     .slice(0, 5)
     .map((item) => ({ id: item.id, title: item.title, disputeId: item.disputeId }));
   return { disputes, orders, customers, evidence };
+}
+
+export function listOrders(organizationId: string) {
+  const store = getStore();
+  return store.orders
+    .filter((item) => item.organizationId === organizationId)
+    .map((order) => {
+      const customer = store.customers.find((item) => item.id === order.customerId);
+      const payment = store.payments.find((item) => item.orderId === order.id);
+      const dispute = payment ? store.disputes.find((item) => item.paymentId === payment.id) : undefined;
+      return { ...order, customerName: customer?.name, disputeId: dispute?.id, paymentId: payment?.razorpayPaymentId };
+    })
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export function listCustomers(organizationId: string) {
+  const store = getStore();
+  return store.customers
+    .filter((item) => item.organizationId === organizationId)
+    .map((customer) => {
+      const orders = store.orders.filter((item) => item.customerId === customer.id);
+      const related = store.disputes
+        .filter((dispute) => {
+          const payment = store.payments.find((item) => item.id === dispute.paymentId);
+          return payment && orders.some((order) => order.id === payment.orderId);
+        })
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+      return { ...customer, orderCount: orders.length, disputeCount: related.length, latestDisputeId: related[0]?.id };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export function disputesToCsv(items: DisputeListItem[]): string {

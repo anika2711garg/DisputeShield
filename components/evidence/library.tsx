@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import type { EvidenceItem } from "@/types/domain";
 import { Card } from "@/components/ui/card";
 import { EvidenceUpload } from "@/components/disputes/evidence-upload";
 import { EvidencePreviewDrawer } from "@/components/disputes/evidence-preview-drawer";
+import { PeekLink } from "@/components/ui/case-peek";
 
 export function EvidenceLibrary({
   items,
@@ -44,9 +44,11 @@ export function EvidenceLibrary({
                 <div className="text-xs text-muted">{item.id} · {item.type}</div>
                 <div className="mt-1 font-medium">{item.title}</div>
                 <p className="mt-2 text-sm text-muted">{item.contentText}</p>
-                <Link href={`/disputes/${item.disputeId}`} className="mt-3 inline-block text-sm text-cyan" onClick={(event) => event.stopPropagation()}>
-                  Open case
-                </Link>
+                <span onClick={(event) => event.stopPropagation()}>
+                  <PeekLink id={item.disputeId} className="mt-3 inline-block text-sm text-cyan">
+                    Open case
+                  </PeekLink>
+                </span>
               </Card>
             </button>
           ))}

@@ -5,20 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const SUGGESTIONS = [
-  "Why are we contesting this dispute?",
-  "What evidence is missing?",
-  "What is the strongest evidence?",
-  "What contradicts the customer's claim?",
-  "Summarise the customer conversation.",
+  "Why is Contest recommended?",
+  "What evidence is weakest?",
+  "Explain the score.",
+  "What changes if acknowledgement is excluded?",
 ];
 
 export function CopilotPanel({ disputeId }: { disputeId: string }) {
-  const [question, setQuestion] = useState(SUGGESTIONS[0] ?? "");
+  const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [citations, setCitations] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   async function ask(q = question) {
+    if (!q.trim()) return;
     setLoading(true);
     const response = await fetch(`/api/disputes/${disputeId}/ask-ai`, {
       method: "POST",
@@ -32,19 +32,29 @@ export function CopilotPanel({ disputeId }: { disputeId: string }) {
   }
 
   return (
-    <div className="rounded-[var(--radius)] bg-surface p-5 hairline">
-      <div className="text-sm text-ai">Case copilot</div>
-      <p className="mt-1 text-xs text-muted">Answers use only this dispute. Citations stay internal.</p>
+    <div className="rounded-[14px] bg-surface p-5 hairline">
+      <div className="text-sm font-medium">Ask about this case…</div>
+      <p className="mt-1 text-xs text-muted">Answers stay on this dispute. AI interpretation only.</p>
       <div className="mt-3 flex flex-wrap gap-2">
         {SUGGESTIONS.map((item) => (
-          <button key={item} type="button" className="rounded-full px-2 py-1 text-[11px] hairline" onClick={() => { setQuestion(item); void ask(item); }}>
+          <button
+            key={item}
+            type="button"
+            className="rounded-full px-2.5 py-1 text-[11px] hairline hover:bg-sunken"
+            onClick={() => {
+              setQuestion(item);
+              void ask(item);
+            }}
+          >
             {item}
           </button>
         ))}
       </div>
       <div className="mt-3 flex gap-2">
-        <Input value={question} onChange={(e) => setQuestion(e.target.value)} />
-        <Button onClick={() => ask()} disabled={loading}>{loading ? "…" : "Ask"}</Button>
+        <Input value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Ask about this case…" />
+        <Button onClick={() => ask()} disabled={loading}>
+          {loading ? "…" : "Ask"}
+        </Button>
       </div>
       {answer && (
         <div className="mt-3 text-sm">

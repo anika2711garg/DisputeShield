@@ -45,6 +45,13 @@ export function dashboardMetrics(organizationId: string) {
     strengthBuckets,
     recent: disputes.slice(0, 8),
     volume: lastNDays(disputes.map((item) => item.createdAt), 14),
+    upcomingDeadlines: disputes
+      .filter((item) => item.respondBy && new Date(item.respondBy).getTime() > Date.now() - 86_400_000)
+      .sort((a, b) => (a.respondBy ?? "").localeCompare(b.respondBy ?? ""))
+      .slice(0, 6),
+    volumeDelta: weekDelta(disputes.map((item) => item.createdAt)),
+    disagreements: disputes.filter((item) => item.recommendation && item.recommendation.modelRecommendation !== item.recommendation.rulesRecommendation).length,
+    unassigned: disputes.filter((item) => !item.assigneeId && !["won", "lost", "accepted", "closed"].includes(item.status)).length,
   };
 }
 
@@ -86,6 +93,18 @@ function lastNDays(dates: string[], days: number): { day: string; count: number 
     out.push({ day: key.slice(5), count: dates.filter((value) => value.startsWith(key)).length });
   }
   return out;
+}
+
+function weekDelta(dates: string[]): number {
+  const now = Date.now();
+  const week = 7 * 86_400_000;
+  const recent = dates.filter((value) => now - new Date(value).getTime() <= week).length;
+  const previous = dates.filter((value) => {
+    const age = now - new Date(value).getTime();
+    return age > week && age <= week * 2;
+  }).length;
+  if (!previous) return recent ? 100 : 0;
+  return Math.round(((recent - previous) / previous) * 100);
 }
 
 function median(values: number[]): number {

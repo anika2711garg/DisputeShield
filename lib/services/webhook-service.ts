@@ -7,6 +7,8 @@ import { isDisputeEvent, webhookEventKey } from "@/lib/razorpay/webhooks";
 import type { Dispute, DisputeStatus, Payment } from "@/types/domain";
 import { writeAudit } from "./audit-service";
 import { notify } from "./notification-service";
+import { getWorkspaceSettings } from "./settings-service";
+import { USERS } from "@/lib/demo/constants";
 
 type RazorpayWebhook = {
   event: string;
@@ -113,6 +115,7 @@ export function ingestWebhook(raw: unknown, signatureValid: boolean): { duplicat
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
+      if (getWorkspaceSettings().autoAssign) dispute.assigneeId = USERS.admin.id;
       next.disputes.push(dispute);
       disputeId = dispute.id;
     }
@@ -140,6 +143,45 @@ export function ingestWebhook(raw: unknown, signatureValid: boolean): { duplicat
     href: `/disputes/${disputeId}`,
   });
   return { duplicate: false, disputeId };
+}
+
+export function listWebhookEvents() {
+  return getStore()
+    .webhookEvents.slice()
+    .sort((a, b) => b.receivedAt.localeCompare(a.receivedAt));
+}
+
+export function listWebhookEventsForDispute(razorpayDisputeId: string) {
+  return listWebhookEvents().filter((item) => item.externalEventKey.includes(razorpayDisputeId) || JSON.stringify(item.payload).includes(razorpayDisputeId));
+}
+
+export function fireTestWebhook(input: {
+  event?: string;
+  amount?: number;
+  reason?: string;
+  disputeId?: string;
+}) {
+  const event = input.event ?? "payment.dispute.created";
+  const razorpayId = input.disputeId ?? `disp_rp_test_${Date.now()}`;
+  const payload = {
+    event,
+    created_at: Math.floor(Date.now() / 1000),
+    payload: {
+      dispute: {
+        entity: {
+          id: razorpayId,
+          payment_id: `pay_test_${Date.now()}`,
+          amount: (input.amount ?? 25000) * 100,
+          currency: "INR",
+          reason_code: "product_not_received",
+          reason_description: input.reason ?? "Product not received",
+          status: event.includes("action_required") ? "action_required" : "open",
+          respond_by: Math.floor(Date.now() / 1000) + 3 * 24 * 3600,
+        },
+      },
+    },
+  };
+  return { ...ingestWebhook(payload, true), payload };
 }
 
 function mapStatus(status?: string): DisputeStatus {

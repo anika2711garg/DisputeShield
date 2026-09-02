@@ -12,6 +12,7 @@ import { recommendAction } from "@/lib/rules/recommendation";
 import { requiredEvidenceFor } from "@/lib/rules/evidence-requirements";
 import { writeAudit } from "./audit-service";
 import { getDisputeBundle } from "./dispute-service";
+import { getWorkspaceSettings } from "./settings-service";
 import type { AiInvestigation, RecommendationRecord } from "@/types/domain";
 
 export async function investigateDispute(organizationId: string, disputeId: string, actorId = "system") {
@@ -80,6 +81,7 @@ export async function investigateDispute(organizationId: string, disputeId: stri
     shipmentNeverShipped: bundle.shipment?.status === "never_shipped",
     fullyRefunded: bundle.refunds.reduce((sum, refund) => sum + refund.amount, 0) >= bundle.dispute.amount,
     conflicting: Boolean(bundle.shipment?.rawData.conflicting),
+    contestThreshold: getWorkspaceSettings().contestThreshold,
   });
 
   const investigation: AiInvestigation = {
@@ -154,6 +156,7 @@ export function scoreWhatIf(organizationId: string, disputeId: string, disabledE
     shipmentNeverShipped: bundle.shipment?.status === "never_shipped",
     fullyRefunded: bundle.refunds.reduce((sum, refund) => sum + refund.amount, 0) >= bundle.dispute.amount,
     conflicting: Boolean(bundle.shipment?.rawData.conflicting),
+    contestThreshold: getWorkspaceSettings().contestThreshold,
   });
   return { score, recommendation: rec };
 }

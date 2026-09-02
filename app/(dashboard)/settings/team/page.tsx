@@ -7,7 +7,7 @@ export default async function TeamPage() {
   const members = getStore().profiles.filter((item) => item.organizationId === user.organizationId);
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-semibold">Team</h1>
+      <h1 className="text-[28px] font-semibold tracking-tight">Team</h1>
       <div className="grid gap-3">
         {members.map((member) => (
           <Card key={member.id}>

@@ -1,6 +1,7 @@
 import { requireSession } from "@/lib/auth/session";
 import { getStore } from "@/lib/db/local-store";
 import { EvidenceLibrary } from "@/components/evidence/library";
+import { PageHeader } from "@/components/ui/page-header";
 
 export default async function EvidencePage() {
   const user = await requireSession();
@@ -11,10 +12,7 @@ export default async function EvidencePage() {
     .map((item) => ({ id: item.id, label: `${item.id} · ${item.reasonDescription}` }));
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-semibold">Evidence library</h1>
-        <p className="mt-2 text-muted">Private merchant evidence. Files stay off the public internet.</p>
-      </div>
+      <PageHeader title="Evidence" description="Private merchant evidence. Files stay off the public internet." />
       <EvidenceLibrary items={items} disputes={disputes} />
     </div>
   );

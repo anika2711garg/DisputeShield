@@ -1,13 +1,9 @@
-export function recommendationTone(value?: string) {
-  if (value === "contest") return "emerald" as const;
-  if (value === "accept") return "danger" as const;
-  return "amber" as const;
-}
+export { recommendationTone, displayStatus } from "./labels";
 
 export function statusTone(value: string) {
-  if (value === "won") return "emerald" as const;
-  if (value === "lost" || value === "accepted") return "danger" as const;
-  if (value === "action_required") return "amber" as const;
-  if (value === "under_review") return "ai" as const;
+  if (value === "won" || value === "Contest Ready") return "emerald" as const;
+  if (value === "lost" || value === "accepted" || value === "Accepted") return "danger" as const;
+  if (value === "action_required" || value === "Needs Review" || value === "Investigating") return "amber" as const;
+  if (value === "under_review" || value === "Contested") return "ai" as const;
   return "muted" as const;
 }
