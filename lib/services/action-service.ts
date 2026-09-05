@@ -10,6 +10,7 @@ import { writeAudit } from "./audit-service";
 import { getDisputeBundle } from "./dispute-service";
 import { notify } from "./notification-service";
 import { getWorkspaceSettings } from "./settings-service";
+import { razorpayDocumentIdsForContest } from "./document-service";
 
 export function saveContestDraft(user: SessionUser, disputeId: string, selectedEvidenceIds: string[], summary: string) {
   const bundle = getDisputeBundle(user.organizationId, disputeId);
@@ -54,11 +55,12 @@ export async function submitContest(user: SessionUser, disputeId: string, select
 
   const armed = getWorkspaceSettings().writeArmed;
   const adapter = getRazorpayAdapter();
+  const documentIds = await razorpayDocumentIdsForContest(bundle, selectedEvidenceIds, armed);
   const result = armed
     ? await adapter.contestDispute(bundle.dispute.razorpayDisputeId, {
         amount: Math.round(bundle.dispute.amount * 100),
         summary: bundle.draft?.summary ?? bundle.investigation?.summary ?? "Merchant contest package",
-        documentIds: selectedEvidenceIds,
+        documentIds,
         action: "submit",
       })
     : { simulated: true as const, message: "Simulation mode — no financial action was sent to Razorpay." };
@@ -90,7 +92,7 @@ export async function submitContest(user: SessionUser, disputeId: string, select
     actorType: "user",
     actorId: user.id,
     action: simulated ? "contest.simulated" : "contest.submitted",
-    metadata: { documents: selectedEvidenceIds.length },
+    metadata: { documents: documentIds.length, razorpayDocuments: armed },
   });
   notify({
     organizationId: user.organizationId,

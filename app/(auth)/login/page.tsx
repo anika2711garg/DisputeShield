@@ -47,17 +47,18 @@ function LoginForm() {
           });
           setLoading(false);
           if (!response.ok) {
-            setError("Authentication failed. Use a demo account.");
+            setError("Authentication failed. Check the email and password.");
             return;
           }
-          router.push((next || "/dashboard") as Route);
+          const data = await response.json().catch(() => ({ user: null }));
+          router.push((data.user?.mustChangePassword ? "/settings/password" : next || "/dashboard") as Route);
         }}
       >
         <div className="mb-6">
           <BrandLogo size={32} />
         </div>
         <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
-        <p className="mt-2 text-sm text-muted">Demo auth until Supabase is connected. AI investigates. Humans decide.</p>
+        <p className="mt-2 text-sm text-muted">Signed session. Passwords are hashed. AI investigates. Humans decide.</p>
         <label className="mt-6 block text-sm">Email</label>
         <Input className="mt-1" value={email} onChange={(e) => setEmail(e.target.value)} />
         <label className="mt-4 block text-sm">Password</label>

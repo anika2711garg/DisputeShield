@@ -46,6 +46,7 @@ const NAV = [
   { href: "/activity", label: "Activity", icon: Activity, tint: "text-amber" },
   { href: "/ai-evaluation", label: "AI Evaluation", icon: Bot, tint: "text-violet" },
   { href: "/demo", label: "Demo Center", icon: PlayCircle, tint: "text-cyan" },
+  { href: "/settings/team", label: "Team", icon: Users, tint: "text-teal" },
 ] as const;
 
 function crumbs(pathname: string): { href: string; label: string }[] {
@@ -172,6 +173,9 @@ export function AppShell({
           </Link>
           <Link href="/settings" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-[13px] text-[var(--sidebar-muted)] hover:bg-surface hover:text-foreground">
             <Settings className="size-4" /> Settings
+          </Link>
+          <Link href="/settings/password" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-[13px] text-[var(--sidebar-muted)] hover:bg-surface hover:text-foreground">
+            Password
           </Link>
           <div className="mt-2 flex items-center gap-2.5 rounded-[10px] bg-surface px-2.5 py-2 hairline">
             <span className="grid size-8 place-items-center rounded-full bg-primary text-[11px] font-semibold text-white">{initials}</span>

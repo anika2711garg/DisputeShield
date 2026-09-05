@@ -17,9 +17,11 @@ export default function IntegrationsPage() {
           {razorpayRuntimeLabel().label}. Adapter {razorpay.adapterMode}. Writes require Armed mode and ENABLE_RAZORPAY_WRITES=true.
         </p>
         <ul className="mt-3 space-y-1 text-sm text-muted">
-          <li>Key: {razorpay.configured ? razorpay.keyIdMasked : "mock"}</li>
-          <li>Webhook HMAC: {razorpay.webhookSecretSet ? "required" : "optional in mock"}</li>
+          <li>Key: {razorpay.configured ? razorpay.keyIdMasked : "mock — add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to .env.local"}</li>
+          <li>Mode: set RAZORPAY_MODE=test for Razorpay test keys. Keep ENABLE_RAZORPAY_WRITES=false until you arm the UI.</li>
+          <li>Webhook HMAC: {razorpay.webhookSecretSet ? "required" : "set RAZORPAY_WEBHOOK_SECRET for signed live/test events"}</li>
           <li>Endpoint: POST /api/webhooks/razorpay</li>
+          <li>Contest uploads selected evidence as Razorpay documents, then submits their IDs.</li>
         </ul>
         <RazorpayActions />
       </Card>

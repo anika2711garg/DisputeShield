@@ -5,13 +5,22 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { formatAbsolute } from "@/lib/ui/dates";
 import { actorKind } from "@/lib/ui/labels";
 import { PeekLink } from "@/components/ui/case-peek";
+import { FileDownload } from "@/components/ui/file-download";
 
 export default async function ActivityPage() {
   const user = await requireSession();
   const events = listAudit(user.organizationId).slice().reverse();
   return (
     <div className="space-y-6">
-      <PageHeader title="Activity" description="Append-only audit log. AI, system and human actions stay distinct." />
+      <PageHeader
+        title="Activity"
+        description="Append-only audit log. AI, system and human actions stay distinct."
+        actions={
+          <FileDownload href="/api/activity/export" className="rounded-[10px] bg-surface px-3 py-2 text-sm hairline">
+            Export CSV
+          </FileDownload>
+        }
+      />
       {events.length === 0 ? (
         <EmptyState title="No action required." body="You're clear for now." />
       ) : (

@@ -19,7 +19,11 @@ export async function POST(request: Request) {
   try {
     const user = await createDemoSession(body.data.email, body.data.password);
     return NextResponse.json({ user });
-  } catch {
-    return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "INVALID_CREDENTIALS";
+    if (message === "INVALID_CREDENTIALS") {
+      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+    }
+    return NextResponse.json({ error: "login_failed", detail: message }, { status: 500 });
   }
 }

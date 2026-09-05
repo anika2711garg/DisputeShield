@@ -1,7 +1,7 @@
 # Demo script (2–3 minutes)
 
 1. Open `/` and show the investigation card: ₹60,000 dispute → evidence found → CONTEST RECOMMENDED.
-2. Sign in as `admin@disputeshield.dev` / `demo1234`.
+2. Sign in as `admin@disputeshield.dev` / `demo1234` (signed session; password is hashed).
 3. On the dashboard, point to amount at risk and the hero case in Recent cases.
 4. Open `disp_hero_macbook`.
 5. Show the claim: Product not received.

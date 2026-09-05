@@ -17,3 +17,9 @@ export function assertFinancialRole(role: UserRole): void {
     throw new Error("PERMISSION_DENIED");
   }
 }
+
+export function assertManageTeam(role: UserRole): void {
+  if (!canManageTeam(role)) {
+    throw new Error("PERMISSION_DENIED");
+  }
+}

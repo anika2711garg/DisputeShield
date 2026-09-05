@@ -90,6 +90,7 @@ export type Profile = {
   avatarUrl?: string;
   createdAt: string;
   password?: string;
+  mustChangePassword?: boolean;
 };
 
 export type Customer = {

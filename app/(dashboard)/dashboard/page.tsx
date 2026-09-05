@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { requireSession } from "@/lib/auth/session";
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/lib/auth/session";
 import { dashboardMetrics } from "@/lib/services/analytics-service";
 import { formatCompactInr, formatInr } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -12,11 +13,19 @@ import { statusTone } from "@/lib/ui/tones";
 import { formatRelativeTo, formatShortDate, deadlineUrgency } from "@/lib/ui/dates";
 import { CaseRowPeek } from "@/components/dashboard/case-row-peek";
 import { PeekButton } from "@/components/ui/case-peek";
+import { EmptyWorkspace } from "@/components/dashboard/empty-workspace";
+import { canManageTeam } from "@/lib/auth/permissions";
+import { onboardingProgress } from "@/lib/services/onboarding-service";
+import { emitDeadlineAlerts } from "@/lib/services/ops-service";
+import { OnboardingChecklist } from "@/components/settings/onboarding-checklist";
 
 export default async function DashboardPage() {
-  const user = await requireSession();
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
+  emitDeadlineAlerts(user.organizationId);
   const metrics = dashboardMetrics(user.organizationId);
   const spark = metrics.volume.map((item) => item.count);
+  const onboarding = onboardingProgress(user.organizationId);
 
   return (
     <div className="space-y-6">
@@ -25,6 +34,10 @@ export default async function DashboardPage() {
         title="Amount at risk, right now"
         description="Prioritize files that can still be contested before the processor deadline. AI investigates. Humans decide."
       />
+      {metrics.received === 0 && <EmptyWorkspace canLoadDemo={canManageTeam(user.role)} />}
+      {metrics.received === 0 && !onboarding.complete && (
+        <OnboardingChecklist steps={onboarding.steps} done={onboarding.done} total={onboarding.total} />
+      )}
 
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard size="lg" delay={0} label="Amount at Risk" value={formatCompactInr(metrics.amountAtRisk)} delta={metrics.volumeDelta} tone="danger" spark={spark} hint={`${metrics.openCount} open cases`} peek="Open + action-required + under review. Won and lost files drop out of this number." />

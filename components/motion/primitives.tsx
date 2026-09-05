@@ -67,13 +67,16 @@ export function CountUp({ value, className }: { value: string; className?: strin
   const numeric = parsed?.[2] ? Number(parsed[2].replace(/,/g, "")) : NaN;
   const prefix = parsed?.[1] ?? "";
   const suffix = parsed?.[3] ?? "";
-  const [shown, setShown] = useState(reduce || !simple ? value : `${prefix}0${suffix}`);
+  const fallback = Boolean(reduce) || !simple || !Number.isFinite(numeric);
+  const [shown, setShown] = useState(fallback ? value : `${prefix}0${suffix}`);
+  const [source, setSource] = useState(value);
+  if (value !== source) {
+    setSource(value);
+    setShown(fallback ? value : `${prefix}0${suffix}`);
+  }
 
   useEffect(() => {
-    if (reduce || !simple || !Number.isFinite(numeric)) {
-      setShown(value);
-      return;
-    }
+    if (fallback) return;
     const start = performance.now();
     const duration = 700;
     const tick = (now: number) => {
@@ -87,7 +90,7 @@ export function CountUp({ value, className }: { value: string; className?: strin
     };
     const id = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(id);
-  }, [value, numeric, prefix, suffix, reduce, simple]);
+  }, [value, numeric, prefix, suffix, fallback]);
 
   return <span className={className}>{shown}</span>;
 }

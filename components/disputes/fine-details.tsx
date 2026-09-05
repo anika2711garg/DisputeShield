@@ -64,7 +64,7 @@ export function FineDetails({ bundle, score, evidenceCount }: { bundle: CaseBund
           animate={{ opacity: 1, y: 0, scale: 1 }}
           whileHover={{ y: -2, scale: 1.03 }}
           transition={{ delay: 0.03 * index, type: "spring", stiffness: 320, damping: 24 }}
-          className={cn("rounded-full px-2.5 py-1 text-[11px] hairline", TINT[label] ?? "bg-surface")}
+          className={cn("rounded-full px-2.5 py-1 text-[11px] hairline", (label && TINT[label]) || "bg-surface")}
         >
           <span className="mr-1.5 text-muted">{label}</span>
           {/^(pay_|disp_|ORD-|INV-|BD|order_)/.test(String(value)) ? (

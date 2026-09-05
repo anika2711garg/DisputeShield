@@ -14,34 +14,16 @@ DisputeShield ingests a Razorpay dispute, correlates merchant data, scores evide
 
 ## Features
 
-- Premium risk command centre
-- Dispute list with filters and views
+- Signed sessions, hashed passwords, signup, team invite / roles
+- Risk command centre, queue, webhooks, orders, customers, evidence, analytics
 - Case workspace with readiness ring, deadline radar, what-if, evidence graph, replay, copilot
 - Human-gated contest / accept (simulation by default)
-- Append-only audit log
+- Contest uploads selected evidence as Razorpay documents when Armed
+- Deadline bells (in-app + `npm run ops:pending`)
+- Append-only audit log with CSV export
 - Demo Center that replays webhook-shaped events
 - 150-case evaluation set (50 held-out)
 - Mock adapters when OpenAI or Razorpay keys are missing
-
-## Screenshots
-
-Add pitch screenshots here after `npm run dev`:
-
-- Landing hero
-- Dashboard
-- Hero MacBook case
-- Review workspace
-- AI evaluation
-
-## Tech stack
-
-Next.js 16.3 · React · TypeScript · Tailwind · Motion · Recharts · Zod · OpenAI Responses API · Razorpay adapters · Supabase-ready Postgres schema · Vitest · Playwright
-
-The intended package manager is pnpm (`packageManager` field). This repo also installs cleanly with npm.
-
-## AI usage
-
-AI interprets messy conversations and writes a summary. It does **not** query SQL, compute refunds, verify webhooks, or submit contests.
 
 ## Run locally
 
@@ -51,45 +33,71 @@ npm run seed
 npm run dev
 ```
 
-Open http://localhost:3000
+If port 3000 is already taken, Next.js moves to 3001, 3002, 3003, … Use the URL printed in the terminal.
 
-Demo login:
+Demo login (password `demo1234` for all):
 
-- `admin@disputeshield.dev` / `demo1234`
-- `reviewer@disputeshield.dev` / `demo1234`
-- `analyst@disputeshield.dev` / `demo1234` (cannot submit or accept)
+- `admin@disputeshield.dev`
+- `reviewer@disputeshield.dev`
+- `analyst@disputeshield.dev` (cannot submit or accept)
+
+Or open `/signup` and create a workspace. Leave **Load the sample MacBook desk** checked to walk the product immediately.
 
 ## Environment
 
-Copy `.env.example` to `.env.local`. The app boots with:
+Copy `.env.example` to `.env.local`. Do not paste secrets into chat.
 
-- Razorpay Demo Mode
-- AI Demo Mode
-- local JSON store
+The app boots with Razorpay mock mode, AI demo mode, and a local JSON store (`.data/store.json`).
 
-See `.env.example` for Supabase, OpenAI, and Razorpay keys.
+```
+RAZORPAY_MODE=test
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+RAZORPAY_WEBHOOK_SECRET=
+ENABLE_RAZORPAY_WRITES=false
+DEMO_AUTH_SECRET=change-this
+```
+
+Restart `npm run dev` after editing `.env.local`.
+
+## Go-live checklist (Razorpay test)
+
+1. Change `DEMO_AUTH_SECRET`.
+2. Add Razorpay **test** keys. Keep `ENABLE_RAZORPAY_WRITES=false`.
+3. Point Razorpay webhooks at `POST /api/webhooks/razorpay`.
+4. Invite a reviewer at `/settings/team`. They must change the one-time password.
+5. Confirm the contest threshold in `/lab`.
+6. Arm the UI **only** when you intend a real test contest, then set `ENABLE_RAZORPAY_WRITES=true`.
+7. Run pending investigations / deadline bells: `npm run ops:pending` or **Settings → Run now**.
+
+Never enable live writes for a demo.
 
 ## Tests
 
 ```bash
 npm run test
 npm run typecheck
-npm run lint
+npm run test:e2e
 ```
 
-## Production notes
+Playwright reuses the running Next server (this repo only allows one `next dev`). Default base URL is http://127.0.0.1:3003. Override with `PLAYWRIGHT_BASE_URL` if yours is different.
 
-- Apply `supabase/migrations/001_init.sql`
-- Create a private `dispute-evidence` bucket
-- Set `RAZORPAY_MODE=test` and a webhook secret
-- Keep `ENABLE_RAZORPAY_WRITES=false` until go-live
-- Never commit secrets
+## Tech stack
+
+Next.js 16.3 · React · TypeScript · Tailwind · Motion · Recharts · Zod · OpenAI Responses API · Razorpay adapters · JSON store (Supabase schema ready, unused) · Vitest · Playwright
+
+Use npm. The `packageManager` field still mentions pnpm.
+
+## AI usage
+
+AI interprets messy conversations and writes a summary. It does **not** query SQL, compute refunds, verify webhooks, or submit contests.
 
 ## Known limitations
 
-- Local JSON store is for demo/single-node use
-- OCR is not performed; the UI never claims it
-- False-positive cost is an estimated merchant exposure, not a Razorpay fee
+- Local JSON store is single-node. Fine for one merchant desk; not a multi-server database.
+- OCR is not performed; the UI never claims it.
+- OpenAI is optional. Evaluation still scores facts in TypeScript unless you add a key.
+- False-positive cost is estimated merchant exposure, not a Razorpay fee.
 
 ## Hackathon pitch
 

@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/auth/session";
 import { listNotifications, markNotificationRead } from "@/lib/services/notification-service";
+import { emitDeadlineAlerts } from "@/lib/services/ops-service";
 
 export async function GET() {
   const user = await requireSession();
+  emitDeadlineAlerts(user.organizationId);
   return NextResponse.json({ items: listNotifications(user.organizationId) });
 }
 

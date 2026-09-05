@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import type { LucideIcon } from "lucide-react";
@@ -26,8 +26,11 @@ export function ModeToggles({
 }) {
   const router = useRouter();
   const [armed, setArmed] = useState(writeArmed);
-
-  useEffect(() => setArmed(writeArmed), [writeArmed]);
+  const [propArmed, setPropArmed] = useState(writeArmed);
+  if (writeArmed !== propArmed) {
+    setPropArmed(writeArmed);
+    setArmed(writeArmed);
+  }
 
   async function toggleArmed(next: boolean) {
     if (next === armed) return;

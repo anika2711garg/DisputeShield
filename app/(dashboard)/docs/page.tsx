@@ -30,6 +30,14 @@ export default function DocsPage() {
           <h2 className="font-semibold">Contest payload</h2>
           <p className="mt-2 text-sm text-muted">Each case previews POST /v1/disputes/{"{id}"}/contest in paise, with submitted_documents, before a human can submit.</p>
         </Card>
+        <Card>
+          <h2 className="font-semibold">Signed session and team</h2>
+          <p className="mt-2 text-sm text-muted">Cookies are HMAC-signed. Passwords are hashed. Admins invite reviewers and analysts at Settings → Team. Invited people must change the one-time password.</p>
+        </Card>
+        <Card>
+          <h2 className="font-semibold">Go-live without moving money</h2>
+          <p className="mt-2 text-sm text-muted">Settings has the checklist. Keep ENABLE_RAZORPAY_WRITES=false until you arm the UI for a real Razorpay test contest. Deadline bells run from the bell poll or npm run ops:pending.</p>
+        </Card>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assertFinancialRole, canSubmitFinancialAction } from "@/lib/auth/permissions";
+import { assertFinancialRole, assertManageTeam, canManageTeam, canSubmitFinancialAction } from "@/lib/auth/permissions";
 
 describe("roles", () => {
   it("blocks analysts from financial actions", () => {
@@ -11,4 +11,11 @@ describe("roles", () => {
     expect(canSubmitFinancialAction("reviewer")).toBe(true);
     expect(canSubmitFinancialAction("admin")).toBe(true);
   });
+
+  it("only admins manage the team", () => {
+    expect(canManageTeam("admin")).toBe(true);
+    expect(canManageTeam("reviewer")).toBe(false);
+    expect(() => assertManageTeam("analyst")).toThrow("PERMISSION_DENIED");
+  });
 });
+

@@ -54,7 +54,10 @@ const MUM: Address = {
 };
 
 function iso(day: number, hour = 10): string {
-  return new Date(Date.UTC(2026, 7, day, hour, 0, 0)).toISOString();
+  const now = new Date();
+  const date = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, 0, 0));
+  date.setUTCDate(date.getUTCDate() + (day - 28));
+  return date.toISOString();
 }
 
 function evidence(partial: Omit<EvidenceItem, "organizationId" | "includedInContest" | "createdAt"> & { createdAt?: string; includedInContest?: boolean }): EvidenceItem {
@@ -282,7 +285,7 @@ function addHeroCase(store: AppStore): void {
     reasonDescription: "Product not received",
     phase: "ready",
     status: "action_required",
-    respondBy: iso(27, 18),
+    respondBy: iso(28, 20),
     assigneeId: USERS.admin.id,
     rawData: { hero: true },
     createdAt: iso(24, 10),

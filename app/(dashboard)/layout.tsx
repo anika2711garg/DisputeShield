@@ -1,12 +1,14 @@
+import { redirect } from "next/navigation";
 import { AppShell } from "@/components/layout/app-shell";
-import { requireSession } from "@/lib/auth/session";
+import { getSessionUser } from "@/lib/auth/session";
 import { aiRuntimeLabel } from "@/lib/ai";
 import { razorpayRuntimeLabel } from "@/lib/razorpay/client";
 import { razorpayWritesEnabled } from "@/lib/env";
 import { getWorkspaceSettings } from "@/lib/services/settings-service";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const user = await requireSession();
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
   const settings = getWorkspaceSettings();
   return (
     <AppShell

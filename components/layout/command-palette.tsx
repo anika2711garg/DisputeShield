@@ -22,6 +22,9 @@ const GO = [
   ["/ai-evaluation", "AI Evaluation"],
   ["/activity", "Activity"],
   ["/docs", "Documentation"],
+  ["/settings", "Settings"],
+  ["/settings/team", "Team"],
+  ["/settings/password", "Password"],
 ] as const;
 
 export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {

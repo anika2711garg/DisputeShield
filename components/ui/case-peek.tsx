@@ -9,7 +9,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Eye } from "lucide-react";
 import { cn, formatInr } from "@/lib/utils";
 import { displayStatus, recommendationLabel, recommendationTone } from "@/lib/ui/labels";
-import { deadlineUrgency, formatRelativeTo, formatShortDate } from "@/lib/ui/dates";
+import { deadlineUrgency, formatShortDate } from "@/lib/ui/dates";
 import { Badge } from "@/components/ui/badge";
 import { statusTone } from "@/lib/ui/tones";
 import { CountUp } from "@/components/motion/primitives";
@@ -42,6 +42,11 @@ export function PeekTrigger({
 }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<CasePeekData | null>(() => peekCache.get(id) ?? null);
+  const [trackedId, setTrackedId] = useState(id);
+  if (id !== trackedId) {
+    setTrackedId(id);
+    setData(peekCache.get(id) ?? null);
+  }
   const [pos, setPos] = useState({ top: 24, left: 24, flip: false });
   const anchor = useRef<HTMLSpanElement>(null);
   const timer = useRef<number>(0);
@@ -72,17 +77,9 @@ export function PeekTrigger({
   }
 
   useEffect(() => {
-    setData(peekCache.get(id) ?? null);
-  }, [id]);
-
-  useEffect(() => {
     if (!open) return;
+    if (peekCache.has(id)) return;
     let cancelled = false;
-    const cached = peekCache.get(id);
-    if (cached) {
-      setData(cached);
-      return;
-    }
     fetch(`/api/disputes/${id}/peek`)
       .then((response) => (response.ok ? response.json() : null))
       .then((payload) => {
