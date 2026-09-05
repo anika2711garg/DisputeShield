@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +10,6 @@ import { ThemeSwitch } from "@/components/layout/theme-switch";
 import { Stamp } from "@/components/motion/primitives";
 
 export default function SignupPage() {
-  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,16 +33,17 @@ export default function SignupPage() {
           setError("");
           const response = await fetch("/api/auth/signup", {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ fullName, email, password, workspaceName, loadDemo }),
           });
-          setLoading(false);
           if (!response.ok) {
+            setLoading(false);
             const data = await response.json().catch(() => ({}));
             setError(data.error === "email_taken" ? "That email already has a workspace." : "Could not create the workspace.");
             return;
           }
-          router.push("/dashboard");
+          window.location.assign("/dashboard");
         }}
       >
         <Stamp className="stamp absolute -right-3 top-8" delay={0.4}>

@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createSignedSession } from "@/lib/auth/session";
+import { applySessionCookies, issueSessionToken } from "@/lib/auth/session";
 import { createWorkspace } from "@/lib/services/team-service";
 import { cloneDemoIntoOrganization } from "@/lib/demo/clone-into-org";
+
+export const runtime = "nodejs";
+export const maxDuration = 30;
 
 const schema = z.object({
   fullName: z.string().min(2).max(80),
@@ -26,8 +29,8 @@ export async function POST(request: Request) {
     if (body.data.loadDemo) {
       cloneDemoIntoOrganization(profile.organizationId, profile.id);
     }
-    await createSignedSession(profile.id);
-    return NextResponse.json({
+    const token = await issueSessionToken(profile.id);
+    const response = NextResponse.json({
       user: {
         id: profile.id,
         email: profile.email,
@@ -36,6 +39,8 @@ export async function POST(request: Request) {
         organizationId: profile.organizationId,
       },
     });
+    applySessionCookies(response, token);
+    return response;
   } catch (error) {
     if (error instanceof Error && error.message === "EMAIL_TAKEN") {
       return NextResponse.json({ error: "email_taken" }, { status: 409 });

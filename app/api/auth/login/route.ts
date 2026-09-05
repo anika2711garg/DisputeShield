@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createDemoSession } from "@/lib/auth/session";
+import { applySessionCookies, createDemoSession, issueSessionToken } from "@/lib/auth/session";
+
+export const runtime = "nodejs";
+export const maxDuration = 30;
 
 const schema = z.object({
   email: z.string().email(),
@@ -18,7 +21,10 @@ export async function POST(request: Request) {
   if (!body.success) return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
   try {
     const user = await createDemoSession(body.data.email, body.data.password);
-    return NextResponse.json({ user });
+    const token = await issueSessionToken(user.id);
+    const response = NextResponse.json({ user });
+    applySessionCookies(response, token, user.mustChangePassword);
+    return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : "INVALID_CREDENTIALS";
     if (message === "INVALID_CREDENTIALS") {

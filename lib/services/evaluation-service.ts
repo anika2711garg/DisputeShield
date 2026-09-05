@@ -1,15 +1,26 @@
 import "server-only";
 
 import { evaluateFromFacts } from "@/lib/demo/evaluation-dataset";
+import { attachEvaluationBenchmark } from "@/lib/demo/seed-data";
 import { createId } from "@/lib/db/ids";
 import { getStore, saveStore } from "@/lib/db/local-store";
 import type { EvaluationRun, Recommendation } from "@/types/domain";
 
+export function ensureEvaluationData(): void {
+  const store = getStore();
+  if (store.evaluationCases.length) return;
+  saveStore((next) => {
+    attachEvaluationBenchmark(next);
+  });
+}
+
 export function latestEvaluationRun(): EvaluationRun | undefined {
+  ensureEvaluationData();
   return getStore().evaluationRuns.at(-1);
 }
 
 export function runHeldOutEvaluation(model = "mock-rules-v1", promptVersion = "v1.0.0"): EvaluationRun {
+  ensureEvaluationData();
   const store = getStore();
   const heldOut = store.evaluationCases.filter((item) => item.split === "held_out");
   const runId = createId("erun");

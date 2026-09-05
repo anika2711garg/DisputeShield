@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import type { Route } from "next";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,6 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
-  const router = useRouter();
   const next = useSearchParams().get("next") ?? "/dashboard";
   const [email, setEmail] = useState("admin@disputeshield.dev");
   const [password, setPassword] = useState("demo1234");
@@ -41,18 +40,24 @@ function LoginForm() {
           event.preventDefault();
           setLoading(true);
           setError("");
-          const response = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-          });
-          setLoading(false);
-          if (!response.ok) {
-            setError("Authentication failed. Check the email and password.");
-            return;
+          try {
+            const response = await fetch("/api/auth/login", {
+              method: "POST",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+            if (!response.ok) {
+              setLoading(false);
+              setError(response.status >= 500 ? "The desk is still waking up. Wait two seconds and try again." : "Authentication failed. Check the email and password.");
+              return;
+            }
+            const data = await response.json().catch(() => ({ user: null }));
+            window.location.assign((data.user?.mustChangePassword ? "/settings/password" : next || "/dashboard") as Route);
+          } catch {
+            setLoading(false);
+            setError("The desk is still waking up. Wait two seconds and try again.");
           }
-          const data = await response.json().catch(() => ({ user: null }));
-          router.push((data.user?.mustChangePassword ? "/settings/password" : next || "/dashboard") as Route);
         }}
       >
         <Stamp className="stamp absolute -right-2 top-6" delay={0.45}>

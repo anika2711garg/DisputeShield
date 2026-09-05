@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { destroySession } from "@/lib/auth/session";
+import { clearSessionCookies } from "@/lib/auth/session";
 
 export async function POST() {
-  await destroySession();
-  return NextResponse.json({ ok: true });
+  const response = NextResponse.json({ ok: true });
+  clearSessionCookies(response);
+  return response;
 }

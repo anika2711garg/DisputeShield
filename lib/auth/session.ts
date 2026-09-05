@@ -1,6 +1,7 @@
 import "server-only";
 
 import { cookies, headers } from "next/headers";
+import { NextResponse } from "next/server";
 import { redirect } from "next/navigation";
 import { getStore, saveStore } from "@/lib/db/local-store";
 import { isSupabaseConfigured } from "@/lib/env";
@@ -10,6 +11,33 @@ import { sessionSecret, signSessionId, verifySessionId } from "./session-token";
 
 const COOKIE = "ds_session";
 const MUST_CHANGE = "ds_must_change";
+
+function cookieBase() {
+  return {
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 14,
+  };
+}
+
+/** Attach the session on the response you return. cookies().set is dropped if the route returns NextResponse.json(). */
+export function applySessionCookies(response: NextResponse, token: string, mustChangePassword = false): void {
+  const base = cookieBase();
+  response.cookies.set(COOKIE, token, base);
+  if (mustChangePassword) response.cookies.set(MUST_CHANGE, "1", base);
+  else response.cookies.set(MUST_CHANGE, "", { path: "/", maxAge: 0 });
+}
+
+export function clearSessionCookies(response: NextResponse): void {
+  response.cookies.set(COOKIE, "", { path: "/", maxAge: 0 });
+  response.cookies.set(MUST_CHANGE, "", { path: "/", maxAge: 0 });
+}
+
+export async function issueSessionToken(userId: string): Promise<string> {
+  return signSessionId(userId, sessionSecret());
+}
 
 export type SessionUser = Pick<Profile, "id" | "organizationId" | "email" | "fullName" | "role"> & {
   mustChangePassword: boolean;
@@ -73,7 +101,6 @@ export async function createDemoSession(email: string, password: string): Promis
     });
   }
   const fresh = getStore().profiles.find((item) => item.id === profile.id) ?? profile;
-  await writeSessionCookie(fresh.id, Boolean(fresh.mustChangePassword));
   return toUser(fresh);
 }
 

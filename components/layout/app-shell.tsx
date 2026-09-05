@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
@@ -83,7 +83,6 @@ export function AppShell({
   writesEnvEnabled: boolean;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const initials = user.fullName
@@ -234,8 +233,8 @@ export function AppShell({
             aria-label="Sign out"
             className="grid size-10 place-items-center rounded-[10px] bg-surface hairline"
             onClick={async () => {
-              await fetch("/api/auth/logout", { method: "POST" });
-              router.push("/login");
+              await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+              window.location.assign("/login");
             }}
           >
             <LogOut className="size-4" />

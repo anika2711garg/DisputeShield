@@ -13,7 +13,9 @@ export async function POST(request: Request) {
   if (!body.success) return NextResponse.json({ error: "invalid" }, { status: 400 });
   try {
     await changeOwnPassword(user.id, body.data.current, body.data.next);
-    return NextResponse.json({ ok: true });
+    const response = NextResponse.json({ ok: true });
+    response.cookies.set("ds_must_change", "", { path: "/", maxAge: 0 });
+    return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : "failed";
     if (message === "INVALID_CREDENTIALS") {

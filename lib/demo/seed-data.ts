@@ -107,6 +107,18 @@ export function buildDemoStore(): AppStore {
   addActionRequiredCase(store);
   addCatalogCases(store);
 
+  store.notifications.push(
+    { id: "ntf_1", organizationId: ORG_ID, title: "New ₹60,000 dispute", body: "Rahul Sharma — Product not received", href: `/disputes/${HERO_DISPUTE_ID}`, read: false, createdAt: iso(24, 10) },
+    { id: "ntf_2", organizationId: ORG_ID, title: "3 disputes approaching deadline", body: "Action required within 12 hours", href: "/disputes?view=needs-attention", read: false, createdAt: iso(24, 11) },
+    { id: "ntf_3", organizationId: ORG_ID, title: "Contest won", body: "disp_won_pixel recovered ₹69,999", href: "/disputes/disp_won_pixel", read: true, createdAt: iso(22, 9) },
+  );
+
+  return store;
+}
+
+/** Heavy 150-case bench — run on the evaluation page, not on every login. */
+export function attachEvaluationBenchmark(store: AppStore): AppStore {
+  if (store.evaluationCases.length) return store;
   store.evaluationCases = generateEvaluationCases(8291);
   const runId = "erun_heldout_v1";
   const heldOut = store.evaluationCases.filter((item) => item.split === "held_out");
@@ -143,17 +155,15 @@ export function buildDemoStore(): AppStore {
   const contestPred = store.evaluationPredictions.filter((item) => item.predictedLabel === "contest");
   const contestTruth = heldOut.filter((item) => item.groundTruth === "contest");
   const tp = store.evaluationPredictions.filter((item) => item.predictedLabel === "contest" && item.correct && heldOut.find((c) => c.id === item.evaluationCaseId)?.groundTruth === "contest").length;
-  const precision = contestPred.length ? tp / contestPred.length : 0;
-  const recall = contestTruth.length ? tp / contestTruth.length : 0;
 
   store.evaluationRuns.push({
     id: runId,
     model: "mock-rules-v1",
     promptVersion: "v1.0.0",
     totalCases: heldOut.length,
-    precision,
-    recall,
-    accuracy: correct / heldOut.length,
+    precision: contestPred.length ? tp / contestPred.length : 0,
+    recall: contestTruth.length ? tp / contestTruth.length : 0,
+    accuracy: heldOut.length ? correct / heldOut.length : 0,
     falsePositives: fp,
     falseNegatives: fn,
     humanEscalations: escalations,
@@ -161,13 +171,6 @@ export function buildDemoStore(): AppStore {
     results: { confusion, split: "held_out", notes: "Deterministic rules+mock evaluator. Held-out labels were not used to tune individual answers." },
     createdAt: iso(28, 16),
   });
-
-  store.notifications.push(
-    { id: "ntf_1", organizationId: ORG_ID, title: "New ₹60,000 dispute", body: "Rahul Sharma — Product not received", href: `/disputes/${HERO_DISPUTE_ID}`, read: false, createdAt: iso(24, 10) },
-    { id: "ntf_2", organizationId: ORG_ID, title: "3 disputes approaching deadline", body: "Action required within 12 hours", href: "/disputes?view=needs-attention", read: false, createdAt: iso(24, 11) },
-    { id: "ntf_3", organizationId: ORG_ID, title: "Contest won", body: "disp_won_pixel recovered ₹69,999", href: "/disputes/disp_won_pixel", read: true, createdAt: iso(22, 9) },
-  );
-
   return store;
 }
 
