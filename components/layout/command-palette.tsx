@@ -60,15 +60,15 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
     <AnimatePresence>
       {open && (
     <motion.div
-      className="fixed inset-0 z-50 grid place-items-start bg-slate-900/45 p-4 pt-[12vh]"
+      className="fixed inset-0 z-50 grid place-items-start bg-[#241c14]/40 p-4 pt-[12vh]"
       onClick={() => onOpenChange(false)}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <motion.div initial={{ opacity: 0, y: 12, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.98 }} transition={{ duration: 0.2 }}>
+      <motion.div initial={{ opacity: 0, y: 16, rotate: -1.2 }} animate={{ opacity: 1, y: 0, rotate: -0.3 }} exit={{ opacity: 0, y: 8, rotate: 0.6 }} transition={{ duration: 0.28 }}>
       <Command
-        className="mx-auto w-full max-w-xl overflow-hidden rounded-[16px] bg-[#101828] text-white shadow-[0_24px_60px_rgba(16,24,40,0.35)]"
+        className="sheet mx-auto w-full max-w-xl overflow-hidden rounded-[6px] bg-[#fff8ee] text-foreground"
         onClick={(event) => event.stopPropagation()}
       >
         <Command.Input
@@ -76,24 +76,24 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
           value={q}
           onValueChange={setQ}
           placeholder="Search disputes, navigate, open the hero case…"
-          className="h-12 w-full border-b border-white/10 bg-transparent px-4 text-sm text-white outline-none placeholder:text-slate-400"
+          className="h-12 w-full border-b border-[var(--border)] bg-transparent px-4 text-sm outline-none placeholder:text-muted"
         />
-        <Command.List className="max-h-80 overflow-auto p-2 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.16em] [&_[cmdk-group-heading]]:text-slate-400">
-          <Command.Group heading="Go">
+        <Command.List className="max-h-80 overflow-auto p-2 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:font-[var(--font-hand)] [&_[cmdk-group-heading]]:text-lg [&_[cmdk-group-heading]]:text-violet">
+          <Command.Group heading="go">
             {GO.map(([href, label]) => (
               <Command.Item
                 key={href}
                 onSelect={() => go(href)}
-                className="cursor-pointer rounded-[10px] px-3 py-2 text-sm text-slate-100 aria-selected:bg-white/8"
+                className="row-ink cursor-pointer rounded-[4px] px-3 py-2 text-sm aria-selected:bg-violet/10"
               >
                 {label}
               </Command.Item>
             ))}
           </Command.Group>
           {results.disputes.length > 0 && (
-            <Command.Group heading="Disputes">
+            <Command.Group heading="disputes">
               {results.disputes.map((item) => (
-                <Command.Item key={item.id} onSelect={() => go(`/disputes/${item.id}`)} className="cursor-pointer rounded-[10px] px-3 py-2 text-sm aria-selected:bg-white/8">
+                <Command.Item key={item.id} onSelect={() => go(`/disputes/${item.id}`)} className="row-ink cursor-pointer rounded-[4px] px-3 py-2 text-sm aria-selected:bg-violet/10">
                   <PeekTrigger id={item.id}>
                     <span>{item.id}</span>
                   </PeekTrigger>
@@ -102,27 +102,27 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
             </Command.Group>
           )}
           {results.orders.length > 0 && (
-            <Command.Group heading="Orders">
+            <Command.Group heading="orders">
               {results.orders.map((item) => (
-                <Command.Item key={item.id} onSelect={() => go(item.href)} className="cursor-pointer rounded-[10px] px-3 py-2 text-sm aria-selected:bg-white/8">
+                <Command.Item key={item.id} onSelect={() => go(item.href)} className="row-ink cursor-pointer rounded-[4px] px-3 py-2 text-sm aria-selected:bg-violet/10">
                   {item.externalId}
                 </Command.Item>
               ))}
             </Command.Group>
           )}
           {results.customers.length > 0 && (
-            <Command.Group heading="Customers">
+            <Command.Group heading="customers">
               {results.customers.map((item) => (
-                <Command.Item key={item.id} onSelect={() => go(item.href)} className="cursor-pointer rounded-[10px] px-3 py-2 text-sm aria-selected:bg-white/8">
+                <Command.Item key={item.id} onSelect={() => go(item.href)} className="row-ink cursor-pointer rounded-[4px] px-3 py-2 text-sm aria-selected:bg-violet/10">
                   {item.name}
                 </Command.Item>
               ))}
             </Command.Group>
           )}
           {results.evidence.length > 0 && (
-            <Command.Group heading="Evidence">
+            <Command.Group heading="evidence">
               {results.evidence.map((item) => (
-                <Command.Item key={item.id} onSelect={() => go(`/disputes/${item.disputeId}`)} className="cursor-pointer rounded-[10px] px-3 py-2 text-sm aria-selected:bg-white/8">
+                <Command.Item key={item.id} onSelect={() => go(`/disputes/${item.disputeId}`)} className="row-ink cursor-pointer rounded-[4px] px-3 py-2 text-sm aria-selected:bg-violet/10">
                   <PeekTrigger id={item.disputeId}>
                     <span>{item.title}</span>
                   </PeekTrigger>

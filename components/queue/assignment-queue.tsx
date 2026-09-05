@@ -103,7 +103,7 @@ function RowCard({
   me: string;
 }) {
   return (
-    <article className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] bg-surface px-4 py-3 hairline">
+    <article className="sheet flutter flex flex-wrap items-center justify-between gap-3 rounded-[6px] px-4 py-3">
       <div className="flex items-start gap-2">
         <PeekButton
           id={item.id}

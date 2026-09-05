@@ -202,7 +202,7 @@ function initials(name?: string) {
 
 function Fact({ label, value, mono, warn }: { label: string; value: string; mono?: boolean; warn?: boolean }) {
   return (
-    <div className={cn("rounded-[12px] px-2.5 py-2", warn ? "peek-deadline-urgent" : "bg-sunken/70")}>
+    <div className={cn("rounded-[4px] px-2.5 py-2", warn ? "peek-deadline-urgent" : "bg-sunken/70")}>
       <div className="peek-section-label">{label}</div>
       <div className={cn("mt-1 truncate text-[12px] leading-4", mono && "font-mono text-[11px]")}>{value}</div>
     </div>
@@ -249,9 +249,15 @@ function CasePeekCard({
       exit={reduce ? { opacity: 0 } : { opacity: 0, y: flip ? -8 : 10, scale: 0.97, filter: "blur(4px)" }}
       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
       style={{ top, left, width: WIDTH }}
-      className="peek-card peek-wash fixed z-50 overflow-hidden rounded-[22px] shadow-[var(--shadow-hover)] hairline"
+      className="peek-card peek-wash sheet flutter fixed z-50 overflow-hidden rounded-[6px] shadow-[var(--shadow-hover)]"
     >
+      <span className="clip" aria-hidden />
       <motion.div className="peek-aurora h-1.5" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} style={{ transformOrigin: "left" }} />
+      {score >= 80 && (
+        <motion.span className="stamp absolute right-4 top-6 z-10" initial={{ scale: 1.5, opacity: 0, rotate: -18 }} animate={{ scale: 1, opacity: 1, rotate: -8 }}>
+          Strong
+        </motion.span>
+      )}
       {loading && <div className="absolute inset-x-0 top-1.5 h-0.5 scan-ai" />}
       {score >= 80 && <div className="peek-sparkle pointer-events-none" aria-hidden />}
 
@@ -290,7 +296,7 @@ function CasePeekCard({
           </div>
         </div>
 
-        <div className="flex items-center gap-4 rounded-[16px] bg-sunken/60 px-3 py-3">
+        <div className="flex items-center gap-4 rounded-[6px] bg-sunken/60 px-3 py-3">
           <div className={cn("relative", score >= 80 && "glow-ring rounded-full")}>
             <svg width="76" height="76" viewBox="0 0 76 76" aria-label={`Score ${score}`}>
               <circle cx="38" cy="38" r="24" fill="none" stroke="var(--border)" strokeWidth="6" />
@@ -485,7 +491,7 @@ function CasePeekCard({
         {data.overrides && data.overrides.length > 0 && <p className="text-[11px] text-muted">{data.overrides[0]}</p>}
 
         {data.quote && (
-          <motion.blockquote initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} className="rounded-[14px] bg-violet/10 px-3.5 py-2.5 text-[13px] italic leading-5">
+          <motion.blockquote initial={{ opacity: 0, x: 8, rotate: 1 }} animate={{ opacity: 1, x: 0, rotate: -0.6 }} className="hand rounded-[4px] bg-violet/10 px-3.5 py-2.5 text-xl leading-6">
             “{data.quote}”
           </motion.blockquote>
         )}

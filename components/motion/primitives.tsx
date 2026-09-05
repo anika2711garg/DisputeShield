@@ -51,8 +51,8 @@ export function StaggerItem({ children, className }: { children: ReactNode; clas
     <motion.div
       className={className}
       variants={{
-        hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 14 },
-        show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+        hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 16, rotate: 1.4 },
+        show: { opacity: 1, y: 0, rotate: 0, transition: { duration: 0.48, ease: [0.22, 1, 0.36, 1] } },
       }}
     >
       {children}
@@ -93,4 +93,98 @@ export function CountUp({ value, className }: { value: string; className?: strin
   }, [value, numeric, prefix, suffix, fallback]);
 
   return <span className={className}>{shown}</span>;
+}
+
+export function InkHeadline({
+  lines,
+  className,
+}: {
+  lines: ReactNode[];
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <h1 className={className}>
+      {lines.map((line, index) => (
+        <motion.span
+          key={index}
+          className="block overflow-hidden"
+          initial={reduce ? false : { y: "110%", rotate: 4 }}
+          animate={{ y: "0%", rotate: 0 }}
+          transition={{ duration: 0.7, delay: 0.08 + index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {line}
+        </motion.span>
+      ))}
+    </h1>
+  );
+}
+
+export function Stamp({
+  children,
+  className,
+  delay = 0.4,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.span
+      className={className}
+      initial={reduce ? false : { scale: 1.6, opacity: 0, rotate: -18 }}
+      animate={{ scale: 1, opacity: 1, rotate: -8 }}
+      transition={{ type: "spring", stiffness: 260, damping: 14, delay }}
+    >
+      {children}
+    </motion.span>
+  );
+}
+
+export function TiltCard({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <motion.div
+      className={className}
+      whileHover={{ y: -7, rotate: -1.1, transition: { type: "spring", stiffness: 320, damping: 16 } }}
+      whileTap={{ scale: 0.985, rotate: 0.6 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+export function HandNote({
+  children,
+  className,
+  rotate = -8,
+  delay = 0.35,
+}: {
+  children: ReactNode;
+  className?: string;
+  rotate?: number;
+  delay?: number;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.p
+      className={className}
+      initial={reduce ? false : { opacity: 0, y: 10, rotate: rotate - 8 }}
+      animate={{ opacity: 1, y: 0, rotate }}
+      transition={{ delay, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </motion.p>
+  );
+}
+
+export function Flutter({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <motion.div
+      className={className}
+      whileHover={{ y: -4, rotate: -1.2, transition: { type: "spring", stiffness: 360, damping: 14 } }}
+    >
+      {children}
+    </motion.div>
+  );
 }

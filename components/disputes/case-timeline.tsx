@@ -21,12 +21,12 @@ export function CaseTimeline({ bundle, audit }: { bundle: CaseBundle; audit: Aud
   ].filter((item): item is { t: string; label: string; kind: "ai" | "human" | "system" } => Boolean(item.t));
 
   return (
-    <div className="rounded-[14px] bg-surface p-5 hairline">
-      <h3 className="text-[13px] font-medium text-muted">Case timeline</h3>
+    <div className="sheet flutter rounded-[6px] p-5">
+      <h3 className="hand text-xl text-violet">case timeline</h3>
       <ol className="mt-4 space-y-3">
         {events.map((event) => (
           <li key={`${event.label}-${event.t}`} className="flex gap-3">
-            <span className={`mt-1 size-2.5 shrink-0 rounded-full ${event.kind === "ai" ? "bg-cyan" : event.kind === "human" ? "bg-amber" : "bg-slate-400"}`} />
+            <span className={`mt-1 size-2.5 shrink-0 rounded-full ${event.kind === "ai" ? "bg-cyan" : event.kind === "human" ? "bg-amber" : "bg-muted"}`} />
             <div>
               <div className="text-sm font-medium">{event.label}</div>
               <div className="text-xs text-muted">{formatAbsolute(event.t)} · {event.kind}</div>
@@ -43,5 +43,5 @@ export function CaseTimeline({ bundle, audit }: { bundle: CaseBundle; audit: Aud
 
 export function actorDot(actorType: string) {
   const kind = actorKind(actorType);
-  return kind === "ai" ? "bg-cyan" : kind === "human" ? "bg-amber" : "bg-slate-400";
+  return kind === "ai" ? "bg-cyan" : kind === "human" ? "bg-amber" : "bg-muted";
 }

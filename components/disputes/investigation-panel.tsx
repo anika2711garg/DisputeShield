@@ -19,7 +19,7 @@ export function InvestigationPanel({ bundle, score }: { bundle: CaseBundle; scor
 
   return (
     <aside className="space-y-4">
-      <div className="overflow-hidden rounded-[14px] bg-gradient-to-br from-violet/10 to-surface hairline">
+      <div className="sheet flutter overflow-hidden rounded-[6px] bg-gradient-to-br from-violet/10 to-surface">
         <div className="flex items-center justify-between bg-[#1c2421] px-5 py-3 text-[#fff8ee]">
           <div className="flex items-center gap-2">
             <Sparkles className="size-4 text-violet" />

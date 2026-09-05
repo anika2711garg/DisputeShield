@@ -52,18 +52,18 @@ export function WhatIfPanel({
       </Button>
       <AnimatePresence>
       {open && (
-        <motion.div className="fixed inset-0 z-40 flex justify-end bg-slate-900/30" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div className="fixed inset-0 z-40 flex justify-end bg-[#241c14]/30" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <button type="button" className="flex-1" aria-label="Close what-if" onClick={() => setOpen(false)} />
           <motion.aside
             initial={{ x: 40, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 40, opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="h-full w-full max-w-md bg-surface p-6 shadow-[var(--shadow)]"
+            className="sheet h-full w-full max-w-md rounded-none p-6"
           >
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-lg font-semibold">What-if</h2>
+                <h2 className="display text-2xl italic">What-if</h2>
                 <p className="mt-1 text-sm text-muted">No AI call required. Rules recalculated locally.</p>
               </div>
               <button type="button" aria-label="Close" onClick={() => setOpen(false)} className="grid size-8 place-items-center rounded-[8px] hairline">

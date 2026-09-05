@@ -38,14 +38,14 @@ export function MetricCard({
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -3, transition: { duration: 0.2 } }}
-      className={cn("group relative rounded-[14px] p-4 hairline", tints[tone ?? "default"], size === "lg" && "p-5 md:col-span-2")}
+      whileHover={{ y: -5, rotate: -0.8, transition: { duration: 0.22 } }}
+      className={cn("sheet flutter group relative rounded-[6px] p-4", tints[tone ?? "default"], size === "lg" && "p-5 md:col-span-2")}
     >
-      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">{label}</div>
+      <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted">{label}</div>
       <div
         className={cn(
-          "mt-2 font-semibold tracking-tight tabular",
-          size === "lg" ? "text-4xl" : "text-2xl",
+          "display mt-2 tracking-tight tabular",
+          size === "lg" ? "text-4xl" : "text-[28px]",
           tone === "danger" && "text-danger",
           tone === "amber" && "text-amber",
           tone === "ai" && "text-violet",

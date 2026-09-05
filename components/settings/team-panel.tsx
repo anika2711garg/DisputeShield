@@ -89,7 +89,7 @@ export function TeamPanel({ members, me, canManage }: { members: Member[]; me: s
       )}
       <div className="space-y-2">
         {members.map((member) => (
-          <article key={member.id} className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] bg-surface px-4 py-3 hairline">
+          <article key={member.id} className="sheet flutter flex flex-wrap items-center justify-between gap-3 rounded-[6px] px-4 py-3">
             <div>
               <div className="font-medium">
                 {member.fullName}

@@ -18,10 +18,10 @@ export function RecommendationCard({
 }) {
   return (
     <motion.div
-      whileHover={{ y: -3, scale: 1.01 }}
-      transition={{ type: "spring", stiffness: 320, damping: 22 }}
+      whileHover={{ y: -5, rotate: -0.8, scale: 1.01 }}
+      transition={{ type: "spring", stiffness: 320, damping: 18 }}
       className={cn(
-        "rounded-[12px] p-4 hairline",
+        "sheet flutter rounded-[6px] p-4",
         kind === "ai" && "bg-gradient-to-br from-violet/10 to-surface",
         kind === "rules" && "bg-gradient-to-br from-cyan/10 to-surface",
         kind === "human" && "bg-[#1c2421] text-[#fff8ee]",

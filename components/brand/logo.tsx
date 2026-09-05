@@ -46,7 +46,7 @@ export function BrandLogo({
     <span className={cn("inline-flex items-center gap-2", className)}>
       <BrandMark size={size} />
       {wordmark && (
-        <span className={cn("text-[15px] font-semibold tracking-tight", invert ? "text-white" : "text-foreground")}>
+        <span className={cn("display text-[17px] italic tracking-tight", invert ? "text-white" : "text-foreground")}>
           DisputeShield
         </span>
       )}

@@ -12,7 +12,7 @@ export default function IntegrationsPage() {
     <div className="space-y-6">
       <PageHeader title="Integrations" description="Razorpay is the system of record for payments, disputes, and webhooks." />
       <Card>
-        <h2 className="font-medium">Razorpay</h2>
+        <h2 className="display text-2xl italic">Razorpay</h2>
         <p className="mt-2 text-sm text-muted">
           {razorpayRuntimeLabel().label}. Adapter {razorpay.adapterMode}. Writes require Armed mode and ENABLE_RAZORPAY_WRITES=true.
         </p>
@@ -26,11 +26,11 @@ export default function IntegrationsPage() {
         <RazorpayActions />
       </Card>
       <Card>
-        <h2 className="font-medium">OpenAI</h2>
+        <h2 className="display text-2xl italic">OpenAI</h2>
         <p className="mt-2 text-sm text-muted">{aiRuntimeLabel().label}. Model is read from OPENAI_MODEL. It interprets chats — it never scores or submits.</p>
       </Card>
       <Card>
-        <h2 className="font-medium">Supabase</h2>
+        <h2 className="display text-2xl italic">Supabase</h2>
         <p className="mt-2 text-sm text-muted">
           {isSupabaseConfigured() ? "Connected" : "Local demo store is active. Apply supabase/migrations when ready."}
         </p>

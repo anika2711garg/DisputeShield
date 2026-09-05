@@ -59,7 +59,7 @@ export function NotificationBell() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 6, scale: 0.98 }}
           transition={{ duration: 0.18 }}
-          className="absolute right-0 mt-2 w-80 rounded-[14px] bg-surface p-2 shadow-[var(--shadow)] hairline"
+          className="sheet absolute right-0 mt-2 w-80 rounded-[6px] p-2"
         >
           <div className="px-2 py-1 text-[11px] uppercase tracking-[0.14em] text-muted">Notifications</div>
           {items.length === 0 && <div className="px-2 py-6 text-sm text-muted">You&apos;re clear for now.</div>}

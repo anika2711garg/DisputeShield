@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "AI chargeback and payment dispute investigation agent for Razorpay merchants.",
-  "packageManager": "pnpm@10.17.0",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

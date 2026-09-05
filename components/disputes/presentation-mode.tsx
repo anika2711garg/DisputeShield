@@ -20,7 +20,7 @@ export function PresentationMode({ bundle, score }: { bundle: CaseBundle; score:
       <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 grid place-items-center bg-[#0B1020] p-6"
+          className="fixed inset-0 z-50 grid place-items-center bg-[#241c14] p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -30,11 +30,11 @@ export function PresentationMode({ bundle, score }: { bundle: CaseBundle; score:
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full max-w-3xl rounded-[20px] bg-white p-10 text-slate-900"
+            className="sheet w-full max-w-3xl rounded-[6px] bg-[#fff8ee] p-10 text-foreground"
           >
-            <div className="text-[11px] font-medium uppercase tracking-[0.2em] text-indigo-600">Hero case</div>
-            <p className="mt-3 text-5xl font-semibold tracking-tight">{formatInr(bundle.dispute.amount)} at risk</p>
-            <p className="mt-3 capitalize text-slate-500">Claim: {bundle.dispute.reasonDescription}</p>
+            <div className="hand text-xl text-violet">hero case</div>
+            <p className="display mt-3 text-5xl italic tracking-tight">{formatInr(bundle.dispute.amount)} at risk</p>
+            <p className="mt-3 capitalize text-muted">Claim: {bundle.dispute.reasonDescription}</p>
             <div className="mt-8 grid gap-3 md:grid-cols-3">
               {["Delivered ✓", "Customer acknowledged ✓", "Addresses match ✓"].map((item, index) => (
                 <motion.div
@@ -42,7 +42,7 @@ export function PresentationMode({ bundle, score }: { bundle: CaseBundle; score:
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 + index * 0.08 }}
-                  className="rounded-[12px] bg-emerald-50 px-3 py-3 text-sm font-medium text-emerald-700"
+                  className="ticket rounded-[4px] bg-emerald/10 px-3 py-3 text-sm font-medium text-emerald"
                 >
                   {item}
                 </motion.div>
@@ -70,8 +70,8 @@ export function PresentationMode({ bundle, score }: { bundle: CaseBundle; score:
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[12px] bg-slate-50 p-4">
-      <div className="text-[11px] uppercase tracking-[0.14em] text-slate-500">{label}</div>
+    <div className="ticket rounded-[4px] bg-sunken/60 p-4">
+      <div className="text-[11px] uppercase tracking-[0.14em] text-muted">{label}</div>
       <div className="mt-2 text-xl font-semibold">{value}</div>
     </div>
   );

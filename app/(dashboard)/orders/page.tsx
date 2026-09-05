@@ -15,7 +15,7 @@ export default async function OrdersPage() {
       {orders.length === 0 ? (
         <EmptyState title="No orders" body="Replay a demo event to populate the ledger." />
       ) : (
-        <div className="overflow-x-auto rounded-[14px] bg-surface hairline">
+        <div className="sheet overflow-x-auto rounded-[6px]">
           <table className="w-full min-w-[760px] text-left text-sm">
             <thead className="text-[11px] uppercase tracking-[0.12em] text-muted">
               <tr>
@@ -29,7 +29,7 @@ export default async function OrdersPage() {
             </thead>
             <tbody>
               {orders.map((order) => (
-                <tr key={order.id} className="border-t">
+                <tr key={order.id} className="row-ink border-t">
                   <td className="px-4 py-3 font-medium">{order.externalId}</td>
                   <td>{order.customerName ?? "—"}</td>
                   <td>{formatInr(order.amount)}</td>

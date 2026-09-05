@@ -323,7 +323,7 @@ Razorpay contest / accept
 | Payments | Razorpay adapters (mock / test / live) |
 | Auth | Signed HMAC cookie `ds_session` (`userId.signature`). Passwords hashed with scrypt. Signup + team invite. |
 | Tests | Vitest, Playwright |
-| Package manager | npm works; repo lists pnpm@10.17.0 |
+| Package manager | npm (`package-lock.json`), Node 20+ |
 
 ---
 

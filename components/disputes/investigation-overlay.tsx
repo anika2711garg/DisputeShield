@@ -37,7 +37,7 @@ export function InvestigationOverlay({
     <AnimatePresence>
       {(active || done) && (
         <motion.div
-          className="fixed inset-0 z-40 grid place-items-center bg-slate-900/45 p-4"
+          className="fixed inset-0 z-40 grid place-items-center bg-[#241c14]/40 p-4"
           role="status"
           aria-live="polite"
           initial={{ opacity: 0 }}
@@ -49,7 +49,7 @@ export function InvestigationOverlay({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ duration: 0.28 }}
-            className="w-full max-w-md overflow-hidden rounded-[16px] bg-surface p-6 shadow-[var(--shadow)]"
+            className="sheet w-full max-w-md overflow-hidden rounded-[6px] p-6"
           >
             <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-cyan">Investigation</div>
             <p className="mt-1 text-sm text-muted">Rules will score the file in code. AI only interprets conversation.</p>

@@ -41,7 +41,7 @@ export function HumanDecisionCard({ bundle, role }: { bundle: CaseBundle; role: 
 
   return (
     <motion.div
-      className="decision-glow rounded-[16px] bg-[#101828] p-5 text-white"
+      className="decision-glow relative rounded-[8px] bg-[#241c14] p-5 text-[#f4ead8]"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -57,20 +57,20 @@ export function HumanDecisionCard({ bundle, role }: { bundle: CaseBundle; role: 
           </motion.span>
           <div>
             <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">Human decision required</div>
-            <h2 className="mt-1 text-lg font-semibold">Only an authorized reviewer can submit this.</h2>
+            <h2 className="display mt-1 text-2xl italic">Only a reviewer can submit this.</h2>
           </div>
         </div>
-        <span className="rounded-full bg-amber-400/15 px-2.5 py-1 text-[11px] font-medium text-amber-300">Razorpay writes disabled</span>
+        <span className="stamp">Writes off</span>
       </div>
       <p className="mt-3 text-sm text-slate-400">AI and rules can recommend an action. They cannot contest or accept.</p>
       <div className="mt-4 grid gap-2 text-sm md:grid-cols-3">
-        <div className="rounded-[10px] bg-violet-500/15 px-3 py-2">
+        <div className="ticket rounded-[4px] bg-violet-500/15 px-3 py-2">
           AI <span className="float-right font-medium text-violet-200">{recommendationLabel(rec?.modelRecommendation)}</span>
         </div>
-        <div className="rounded-[10px] bg-cyan-500/15 px-3 py-2">
+        <div className="ticket rounded-[4px] bg-cyan-500/15 px-3 py-2">
           Rules <span className="float-right font-medium text-cyan-200">{recommendationLabel(rec?.rulesRecommendation)}{rec?.score != null ? ` · ${rec.score}/100` : ""}</span>
         </div>
-        <div className="rounded-[10px] bg-white/8 px-3 py-2">
+        <div className="ticket rounded-[4px] bg-white/8 px-3 py-2">
           You <span className="float-right font-medium text-white">Pending</span>
         </div>
       </div>

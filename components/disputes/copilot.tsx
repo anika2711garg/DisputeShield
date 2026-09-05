@@ -32,7 +32,7 @@ export function CopilotPanel({ disputeId }: { disputeId: string }) {
   }
 
   return (
-    <div className="rounded-[14px] bg-surface p-5 hairline">
+    <div className="sheet flutter rounded-[6px] p-5">
       <div className="text-sm font-medium">Ask about this case…</div>
       <p className="mt-1 text-xs text-muted">Answers stay on this dispute. AI interpretation only.</p>
       <div className="mt-3 flex flex-wrap gap-2">
@@ -40,7 +40,7 @@ export function CopilotPanel({ disputeId }: { disputeId: string }) {
           <button
             key={item}
             type="button"
-            className="rounded-full px-2.5 py-1 text-[11px] hairline hover:bg-sunken"
+            className="ticket rounded-[4px] px-2.5 py-1 text-[11px]"
             onClick={() => {
               setQuestion(item);
               void ask(item);

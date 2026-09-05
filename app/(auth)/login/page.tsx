@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BrandLogo } from "@/components/brand/logo";
 import { ThemeSwitch } from "@/components/layout/theme-switch";
+import { Stamp } from "@/components/motion/primitives";
 
 export default function LoginPage() {
   return (
@@ -32,10 +33,10 @@ function LoginForm() {
         <ThemeSwitch />
       </div>
       <motion.form
-        initial={{ opacity: 0, y: 18, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 w-full max-w-md rounded-[16px] bg-surface p-8 shadow-[var(--shadow)] hairline"
+        initial={{ opacity: 0, y: 28, rotate: -1.4 }}
+        animate={{ opacity: 1, y: 0, rotate: -0.4 }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        className="sheet relative z-10 w-full max-w-md rounded-[6px] p-8"
         onSubmit={async (event) => {
           event.preventDefault();
           setLoading(true);
@@ -54,11 +55,12 @@ function LoginForm() {
           router.push((data.user?.mustChangePassword ? "/settings/password" : next || "/dashboard") as Route);
         }}
       >
-        <div className="mb-6">
-          <BrandLogo size={32} />
-        </div>
-        <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
-        <p className="mt-2 text-sm text-muted">Signed session. Passwords are hashed. AI investigates. Humans decide.</p>
+        <Stamp className="stamp absolute -right-2 top-6" delay={0.45}>
+          Signed
+        </Stamp>
+        <BrandLogo size={32} />
+        <h1 className="display ink-title mt-6 text-4xl italic">Sign in</h1>
+        <p className="hand mt-3 text-xl text-violet">hashed password · signed cookie · no machine contest</p>
         <label className="mt-6 block text-sm">Email</label>
         <Input className="mt-1" value={email} onChange={(e) => setEmail(e.target.value)} />
         <label className="mt-4 block text-sm">Password</label>
@@ -67,11 +69,14 @@ function LoginForm() {
         <Button className="mt-6 w-full" disabled={loading}>
           {loading ? "Signing in…" : "Continue"}
         </Button>
-        <p className="mt-4 text-xs text-muted">
-          admin@disputeshield.dev / reviewer@disputeshield.dev / analyst@disputeshield.dev · demo1234
+        <p className="mt-4 font-mono text-[11px] text-muted">
+          admin@ / reviewer@ / analyst@disputeshield.dev · demo1234
         </p>
         <p className="mt-4 text-sm text-muted">
-          No account? <Link href="/signup" className="text-cyan">Create one</Link>
+          No account?{" "}
+          <Link href="/signup" className="ink-underline text-cyan">
+            Create one
+          </Link>
         </p>
       </motion.form>
     </div>

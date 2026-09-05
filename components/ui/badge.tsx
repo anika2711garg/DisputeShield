@@ -19,7 +19,7 @@ export function Badge({
     ai: "text-violet bg-violet/10 border-violet/15",
   };
   return (
-    <span className={cn("inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium tracking-wide", tones[tone], className)}>
+    <span className={cn("badge-stamp inline-flex items-center border px-2 py-0.5 text-[10px] font-bold tracking-wide", tones[tone], className)}>
       {children}
     </span>
   );

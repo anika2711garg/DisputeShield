@@ -129,7 +129,7 @@ export function DisputeTable({ rows, total }: { rows: DisputeTableRow[]; total: 
             Columns
           </Button>
           {menu && (
-            <div className="absolute right-0 z-10 mt-2 w-52 rounded-[12px] bg-surface p-2 shadow-[var(--shadow)] hairline">
+            <div className="sheet absolute right-0 z-10 mt-2 w-52 rounded-[6px] p-2">
               {COLUMNS.map((column) => (
                 <label key={column.id} className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm">
                   <input type="checkbox" checked={visible.includes(column.id)} onChange={() => toggle(column.id)} />
@@ -159,8 +159,8 @@ export function DisputeTable({ rows, total }: { rows: DisputeTableRow[]; total: 
           Export CSV
         </Button>
       </div>
-      <div className="overflow-x-auto rounded-[14px] bg-surface hairline">
-        <table className="w-full min-w-[1100px] text-left text-sm">
+      <div className="sheet overflow-x-auto rounded-[6px]">
+        <table className="ledger w-full min-w-[1100px] text-left text-sm">
           <thead className="text-[11px] uppercase tracking-[0.12em] text-muted">
             <tr>
               <th className="w-8 px-2 py-3" />
@@ -186,10 +186,10 @@ export function DisputeTable({ rows, total }: { rows: DisputeTableRow[]; total: 
             {rows.map((item, index) => (
               <motion.tr
                 key={item.id}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.03, duration: 0.28 }}
-                className="border-t transition-colors hover:bg-sunken/70"
+                initial={{ opacity: 0, y: 8, rotate: 0.4 }}
+                animate={{ opacity: 1, y: 0, rotate: 0 }}
+                transition={{ delay: index * 0.04, duration: 0.32 }}
+                className="row-ink border-t"
               >
                 <td className="px-2 py-3">
                   <PeekButton

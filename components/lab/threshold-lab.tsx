@@ -43,7 +43,7 @@ export function ThresholdLab({ initial }: { initial: number }) {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-[16px] bg-gradient-to-br from-violet/10 to-surface p-5 hairline">
+      <div className="sheet flutter rounded-[6px] bg-gradient-to-br from-violet/10 to-surface p-5">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet">Rules lab</div>
@@ -83,7 +83,7 @@ export function ThresholdLab({ initial }: { initial: number }) {
         )}
       </div>
       {data && (
-        <div className="overflow-x-auto rounded-[14px] bg-surface hairline">
+        <div className="sheet overflow-x-auto rounded-[6px]">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="text-[10px] uppercase tracking-[0.14em] text-muted">
               <tr>
@@ -96,7 +96,7 @@ export function ThresholdLab({ initial }: { initial: number }) {
             </thead>
             <tbody>
               {data.rows.slice(0, 20).map((row) => (
-                <tr key={row.id} className="border-t">
+                <tr key={row.id} className="row-ink border-t">
                   <td className="px-4 py-2.5">
                     <PeekLink id={row.id} className="text-electric">
                       {row.customerName ?? row.id}
@@ -119,7 +119,7 @@ export function ThresholdLab({ initial }: { initial: number }) {
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-[12px] bg-white px-3 py-2 hairline">
+    <div className="ticket rounded-[4px] bg-white px-3 py-2">
       <div className="text-[10px] uppercase tracking-[0.14em] text-muted">{label}</div>
       <div className="mt-1 text-2xl font-semibold tabular">{value}</div>
     </div>

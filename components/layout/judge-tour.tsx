@@ -41,7 +41,7 @@ export function JudgeTour() {
           const first = STEPS[0];
           if (first) router.push(first.href as Route);
         }}
-        className="hidden items-center gap-1.5 rounded-full bg-violet/10 px-2.5 py-1 text-[11px] font-medium text-violet lg:inline-flex"
+        className="ticket hidden items-center gap-1.5 rounded-[4px] px-2.5 py-1 text-[11px] font-medium text-violet lg:inline-flex"
       >
         <Play className="size-3" /> Judge tour
       </button>
@@ -51,27 +51,27 @@ export function JudgeTour() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
-            className="fixed bottom-4 right-4 z-40 w-[320px] rounded-[16px] bg-[#101828] p-4 text-white shadow-[0_18px_40px_rgba(16,24,40,0.28)]"
+            className="sheet fixed bottom-4 right-4 z-40 w-[320px] rounded-[6px] bg-[#241c14] p-4 text-[#f4ead8]"
           >
             <div className="flex items-start justify-between gap-2">
               <div>
-                <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                  Step {step + 1} / {STEPS.length}
+                <div className="hand text-lg text-amber-200/80">
+                  step {step + 1} / {STEPS.length}
                 </div>
-                <h3 className="mt-1 text-sm font-semibold">{current.title}</h3>
+                <h3 className="display mt-1 text-xl italic">{current.title}</h3>
               </div>
               <button type="button" aria-label="Close tour" onClick={() => setOpen(false)} className="grid size-7 place-items-center rounded-md bg-white/8">
                 <X className="size-3.5" />
               </button>
             </div>
-            <p className="mt-2 text-sm text-slate-300">{current.body}</p>
+            <p className="mt-2 text-sm text-white/70">{current.body}</p>
             <div className="mt-4 flex justify-between">
-              <button type="button" className="text-xs text-slate-400" disabled={step === 0} onClick={() => go(step - 1)}>
+              <button type="button" className="text-xs text-white/50" disabled={step === 0} onClick={() => go(step - 1)}>
                 Back
               </button>
               <button
                 type="button"
-                className="rounded-full bg-primary px-3 py-1 text-xs font-medium"
+                className="rounded-[4px] bg-primary px-3 py-1 text-xs font-medium"
                 onClick={() => {
                   if (step >= STEPS.length - 1) setOpen(false);
                   else go(step + 1);

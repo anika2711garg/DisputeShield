@@ -66,7 +66,7 @@ export function EvidencePreviewDrawer({
           <Row label="Path" value={item.storagePath ?? "Structured merchant record"} />
           <Row label="Relevance / strength" value={`${item.relevanceScore} / ${item.strengthScore}`} />
         </dl>
-        <div className="mt-5 overflow-hidden rounded-2xl bg-sunken hairline">
+        <div className="mt-5 overflow-hidden rounded-[6px] bg-sunken hairline">
           {fileUrl && isImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={fileUrl} alt={item.title} className="max-h-[420px] w-full object-contain" />

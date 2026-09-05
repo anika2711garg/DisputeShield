@@ -110,13 +110,13 @@ export function AppShell({
   }, [pathname]);
 
   return (
-    <div className="app-grid min-h-screen bg-background text-foreground">
+    <div className="app-grid relative min-h-screen bg-background text-foreground">
       <AnimatePresence>
         {menuOpen && (
           <motion.button
             type="button"
             aria-label="Close menu"
-            className="fixed inset-0 z-30 bg-slate-900/40 md:hidden"
+            className="fixed inset-0 z-30 bg-[#241c14]/40 md:hidden"
             onClick={() => setMenuOpen(false)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -126,11 +126,11 @@ export function AppShell({
       </AnimatePresence>
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-[248px] flex-col border-r border-violet/10 bg-sidebar px-3 py-5 transition-transform duration-300 md:translate-x-0",
+          "folder-rail fixed inset-y-0 left-0 z-40 w-[248px] flex-col border-r border-[var(--border)] bg-sidebar px-3 py-5 transition-transform duration-300 md:translate-x-0",
           menuOpen ? "flex translate-x-0" : "hidden md:flex",
         )}
       >
-        <div className="mb-7 flex items-center justify-between px-2">
+        <div className="mb-4 flex items-center justify-between px-2">
           <Link href="/dashboard" onClick={() => setMenuOpen(false)}>
             <BrandLogo size={30} />
           </Link>
@@ -138,6 +138,7 @@ export function AppShell({
             <X className="size-4" />
           </button>
         </div>
+        <p className="hand doodle mb-3 px-2 text-lg text-[var(--sidebar-muted)]">the folder rail</p>
         <nav className="flex flex-1 flex-col gap-0.5">
           {NAV.map((item) => {
             const active = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`)) || (item.href === "/dashboard" && pathname === "/dashboard");
@@ -146,8 +147,9 @@ export function AppShell({
                 key={item.href}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
+                data-active={active ? "true" : "false"}
                 className={cn(
-                  "relative flex items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-[13px] text-[var(--sidebar-muted)] transition duration-150 hover:bg-surface hover:text-foreground",
+                  "nav-ink nav-tab relative flex items-center gap-2.5 rounded-[4px] px-2.5 py-2 text-[13px] text-[var(--sidebar-muted)] transition duration-200 hover:translate-x-0.5 hover:bg-surface hover:text-foreground",
                   active && "bg-surface text-foreground shadow-[var(--shadow)]",
                 )}
               >
@@ -188,7 +190,7 @@ export function AppShell({
       </aside>
 
       <div className="md:pl-[248px]">
-        <header className="sticky top-0 z-20 border-b border-violet/10 bg-background/80 backdrop-blur-md">
+        <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-background/75 backdrop-blur-md">
         <div className="flex flex-wrap items-center gap-3 px-4 py-3">
           <button
             type="button"
@@ -211,7 +213,7 @@ export function AppShell({
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-[10px] bg-surface px-3 text-sm text-muted hairline md:max-w-sm"
+            className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-[4px] bg-surface px-3 text-sm text-muted hairline transition hover:-translate-y-px md:max-w-sm"
           >
             <Search className="size-4 shrink-0" />
             <span className="truncate">Search disputes, orders, customers</span>
@@ -242,7 +244,7 @@ export function AppShell({
         <motion.div
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-wrap items-center justify-between gap-2 border-t border-violet/10 bg-surface/70 px-4 py-2"
+          className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border)] bg-surface/70 px-4 py-2"
         >
           <ModeToggles writeArmed={writeArmed} writesEnvEnabled={writesEnvEnabled} />
           <p className="hidden text-[11px] text-muted md:block">Light/dark and Razorpay write mode</p>
@@ -252,10 +254,10 @@ export function AppShell({
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0.85, y: -4 }}
-              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: 18, rotate: 0.7 }}
+              animate={{ opacity: 1, y: 0, rotate: 0 }}
+              exit={{ opacity: 0.75, y: -10, rotate: -0.4 }}
+              transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
             >
               {children}
             </motion.div>

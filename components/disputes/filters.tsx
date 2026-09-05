@@ -39,8 +39,9 @@ export function DisputeFilters() {
             <button
               key={id}
               type="button"
+              data-active={view === id || (id === "all" && !params.get("view")) ? "true" : "false"}
               onClick={() => setParam("view", id === "all" ? "" : id)}
-              className={`rounded-full px-3 py-1 text-xs tracking-wide hairline ${view === id || (id === "all" && !params.get("view")) ? "bg-cyan text-white" : "bg-white"}`}
+              className="paper-tab rounded-[4px] px-3 py-1 text-xs tracking-wide"
             >
               {label}
             </button>
@@ -54,25 +55,25 @@ export function DisputeFilters() {
           defaultValue={params.get("q") ?? ""}
           onBlur={(e) => setParam("q", e.target.value)}
         />
-        <select className="h-10 rounded-[10px] bg-white px-3 text-sm hairline" defaultValue={params.get("status") ?? ""} onChange={(e) => setParam("status", e.target.value)}>
+        <select className="h-10 rounded-[4px] bg-white px-3 text-sm hairline" defaultValue={params.get("status") ?? ""} onChange={(e) => setParam("status", e.target.value)}>
           <option value="">All statuses</option>
           {["open", "action_required", "under_review", "won", "lost", "accepted"].map((s) => (
             <option key={s} value={s}>{s.replaceAll("_", " ")}</option>
           ))}
         </select>
-        <select className="h-10 rounded-[10px] bg-white px-3 text-sm hairline" defaultValue={params.get("reason") ?? ""} onChange={(e) => setParam("reason", e.target.value)}>
+        <select className="h-10 rounded-[4px] bg-white px-3 text-sm hairline" defaultValue={params.get("reason") ?? ""} onChange={(e) => setParam("reason", e.target.value)}>
           <option value="">All reasons</option>
           {["product_not_received", "transaction_not_recognised", "service_not_provided", "refund_not_received", "product_not_as_described"].map((s) => (
             <option key={s} value={s}>{s.replaceAll("_", " ")}</option>
           ))}
         </select>
-        <select className="h-10 rounded-[10px] bg-white px-3 text-sm hairline" defaultValue={params.get("minScore") ?? ""} onChange={(e) => setParam("minScore", e.target.value)}>
+        <select className="h-10 rounded-[4px] bg-white px-3 text-sm hairline" defaultValue={params.get("minScore") ?? ""} onChange={(e) => setParam("minScore", e.target.value)}>
           <option value="">Score: any</option>
           <option value="80">80+</option>
           <option value="50">50+</option>
           <option value="0">0+</option>
         </select>
-        <select className="h-10 rounded-[10px] bg-white px-3 text-sm hairline" defaultValue={params.get("range") ?? ""} onChange={(e) => setParam("range", e.target.value)}>
+        <select className="h-10 rounded-[4px] bg-white px-3 text-sm hairline" defaultValue={params.get("range") ?? ""} onChange={(e) => setParam("range", e.target.value)}>
           <option value="">Any date</option>
           <option value="7">Last 7 days</option>
           <option value="30">Last 30 days</option>

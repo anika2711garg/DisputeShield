@@ -27,13 +27,13 @@ export function WebhookInbox({ events }: { events: EventRow[] }) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-[14px] bg-gradient-to-br from-cyan/10 to-surface p-5 hairline">
+      <div className="sheet flutter rounded-[6px] bg-gradient-to-br from-cyan/10 to-surface p-5">
         <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-cyan">Razorpay webhook</div>
         <h2 className="mt-1 text-lg font-semibold">POST /api/webhooks/razorpay</h2>
         <p className="mt-1 text-sm text-muted">HMAC-SHA256 via x-razorpay-signature. Duplicate events are keyed by event + dispute + created_at.</p>
         <div className="mt-4 flex flex-wrap gap-2">
           <select
-            className="h-10 rounded-[10px] bg-white px-3 text-sm hairline"
+            className="h-10 rounded-[4px] bg-white px-3 text-sm hairline"
             value={event}
             onChange={(e) => setEvent(e.target.value as (typeof RAZORPAY_DISPUTE_EVENTS)[number])}
           >
@@ -73,7 +73,7 @@ export function WebhookInbox({ events }: { events: EventRow[] }) {
         {events.map((item) => {
           const disputeId = disputeIdFromWebhookPayload(item.payload);
           return (
-          <article key={item.id} className="rounded-[14px] bg-surface p-4 hairline">
+          <article key={item.id} className="sheet flutter rounded-[6px] p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <div className="font-mono text-sm">{item.eventType}</div>
@@ -93,7 +93,7 @@ export function WebhookInbox({ events }: { events: EventRow[] }) {
               </div>
             </div>
             {open === item.id && (
-              <pre className="mt-3 overflow-auto rounded-[10px] bg-[#101828] p-3 text-[11px] text-slate-200">{JSON.stringify(item.payload, null, 2)}</pre>
+              <pre className="mt-3 overflow-auto rounded-[4px] bg-[#241c14] p-3 text-[11px] text-[#f4ead8]">{JSON.stringify(item.payload, null, 2)}</pre>
             )}
           </article>
           );

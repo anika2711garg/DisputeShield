@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BrandLogo } from "@/components/brand/logo";
 import { ThemeSwitch } from "@/components/layout/theme-switch";
+import { Stamp } from "@/components/motion/primitives";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -20,14 +21,14 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="aurora app-grid grid min-h-screen place-items-center px-4">
+    <div className="aurora app-grid grid min-h-screen place-items-center px-4 py-10">
       <div className="absolute right-4 top-4 z-20">
         <ThemeSwitch />
       </div>
       <motion.form
-        initial={{ opacity: 0, y: 18, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        className="relative z-10 w-full max-w-md rounded-[16px] bg-surface p-8 shadow-[var(--shadow)] hairline"
+        initial={{ opacity: 0, y: 28, rotate: 1.2 }}
+        animate={{ opacity: 1, y: 0, rotate: 0.35 }}
+        className="sheet relative z-10 w-full max-w-md rounded-[6px] p-8"
         onSubmit={async (event) => {
           event.preventDefault();
           setLoading(true);
@@ -46,9 +47,12 @@ export default function SignupPage() {
           router.push("/dashboard");
         }}
       >
+        <Stamp className="stamp absolute -right-3 top-8" delay={0.4}>
+          New desk
+        </Stamp>
         <BrandLogo size={32} />
-        <h1 className="mt-6 text-2xl font-semibold tracking-tight">Create a workspace</h1>
-        <p className="mt-2 text-sm text-muted">You become the admin. Invite reviewers later. AI still cannot contest.</p>
+        <h1 className="display ink-title mt-6 text-4xl italic">Open a workspace</h1>
+        <p className="hand mt-3 text-xl text-violet">you run the desk · the model still cannot contest</p>
         <label className="mt-6 block text-sm">Your name</label>
         <Input className="mt-1" value={fullName} onChange={(event) => setFullName(event.target.value)} required minLength={2} />
         <label className="mt-4 block text-sm">Work email</label>
@@ -66,7 +70,10 @@ export default function SignupPage() {
           {loading ? "Creating…" : "Create workspace"}
         </Button>
         <p className="mt-4 text-sm text-muted">
-          Already have an account? <Link href="/login" className="text-cyan">Sign in</Link>
+          Already have an account?{" "}
+          <Link href="/login" className="ink-underline text-cyan">
+            Sign in
+          </Link>
         </p>
       </motion.form>
     </div>

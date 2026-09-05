@@ -16,7 +16,7 @@ export function PaymentTruth({ bundle }: { bundle: CaseBundle }) {
   const match = payment ? Math.abs(payment.amount - bundle.dispute.amount) < 1 : false;
 
   return (
-    <section className="rounded-[14px] bg-surface p-5 hairline">
+    <section className="sheet flutter rounded-[6px] p-5">
       <div className="flex items-center justify-between gap-2">
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-cyan">Razorpay payment</div>

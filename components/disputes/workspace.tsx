@@ -34,7 +34,7 @@ import { motion } from "motion/react";
 
 const EvidenceGraph = dynamic(() => import("./evidence-graph").then((mod) => ({ default: mod.EvidenceGraph })), {
   ssr: false,
-  loading: () => <div className="grid h-[380px] place-items-center rounded-[14px] bg-sunken text-sm text-muted">Loading graph…</div>,
+          loading: () => <div className="sheet grid h-[380px] place-items-center rounded-[6px] text-sm text-muted">Loading graph…</div>,
 });
 
 export function DisputeWorkspace({
@@ -87,7 +87,7 @@ export function DisputeWorkspace({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <CopyId value={bundle.dispute.id} className="text-lg font-semibold text-foreground" />
+            <CopyId value={bundle.dispute.id} className="display text-xl italic text-foreground" />
             <Badge tone={statusTone(statusLabel)}>{statusLabel}</Badge>
             {bundle.dispute.rawData.hero === true && <Badge tone="cyan">Hero demo</Badge>}
             {bundle.dispute.rawData.simulated === true && <Badge tone="amber">Simulated event</Badge>}
@@ -100,7 +100,7 @@ export function DisputeWorkspace({
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-3 text-4xl font-semibold tracking-tight tabular"
+            className="display mt-3 text-4xl italic tracking-tight tabular"
           >
             {formatInr(bundle.dispute.amount)} <span className="text-base font-medium text-muted">at risk</span>
           </motion.p>
@@ -121,7 +121,7 @@ export function DisputeWorkspace({
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between gap-3 rounded-[12px] bg-amber/10 px-4 py-2.5 text-sm text-amber"
+        className="ticket flex items-center justify-between gap-3 rounded-[4px] bg-amber/10 px-4 py-2.5 text-sm text-amber"
       >
         <span className="font-medium">Evidence is strong. Human approval is required before contesting.</span>
         <span className="hidden text-xs md:inline">AI and rules are inputs — not authority.</span>
@@ -157,7 +157,7 @@ export function DisputeWorkspace({
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="space-y-5">
-          <section className="rounded-[14px] bg-surface p-5 hairline">
+          <section className="sheet flutter rounded-[6px] p-5">
             <ReadinessRing
               score={score.total}
               confidence={rec?.confidence ?? 0}
@@ -165,12 +165,12 @@ export function DisputeWorkspace({
               breakdown={score.dimensions.map((d) => ({ label: d.label, awarded: d.awarded, max: d.max }))}
             />
           </section>
-          <section className="rounded-[14px] bg-surface p-5 hairline">
+          <section className="sheet flutter rounded-[6px] p-5">
             <EvidenceGraph bundle={bundle} investigating={busy} />
           </section>
           <section className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-[13px] font-medium text-muted">Evidence</h3>
+              <h3 className="hand text-xl text-violet">evidence slips</h3>
               <span className="text-xs text-muted">{evidence.length} items · include/exclude from contest</span>
             </div>
             <EvidenceUpload disputeId={bundle.dispute.id} />
@@ -182,13 +182,13 @@ export function DisputeWorkspace({
           </section>
           <CaseTimeline bundle={bundle} audit={audit} />
           {bundle.messages.length > 0 && (
-            <section className="rounded-[14px] bg-surface p-5 hairline">
-              <h3 className="text-[13px] font-medium text-muted">Customer communication</h3>
+            <section className="sheet flutter rounded-[6px] p-5">
+              <h3 className="hand text-xl text-violet">the messy chat</h3>
               <div className="mt-3 space-y-2">
                 {bundle.messages.map((message) => {
                   const highlight = /got the laptop|thanks|received|working/i.test(message.body);
                   return (
-                    <div key={message.id} className={`rounded-[10px] px-3 py-2 ${highlight ? "bg-emerald/8" : "bg-sunken"}`}>
+                    <div key={message.id} className={`ticket rounded-[4px] px-3 py-2 ${highlight ? "bg-emerald/8" : "bg-sunken"}`}>
                       <div className="text-[11px] uppercase text-muted">
                         {message.senderType} · {formatAbsolute(message.sentAt)}
                       </div>
@@ -234,7 +234,7 @@ function EvidenceRow({ item, onPreview }: { item: EvidenceItem; onPreview: () =>
     router.refresh();
   }
   return (
-    <div className="rounded-[14px] bg-surface p-4 text-left hairline">
+    <div className="sheet flutter rounded-[6px] p-4 text-left">
       <button type="button" className="w-full text-left" onClick={onPreview}>
         <div className="flex items-start justify-between gap-3">
           <div>

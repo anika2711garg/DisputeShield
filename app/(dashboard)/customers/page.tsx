@@ -14,7 +14,7 @@ export default async function CustomersPage() {
       {customers.length === 0 ? (
         <EmptyState title="No customers" body="Seeded demo data appears after first load." />
       ) : (
-        <div className="overflow-x-auto rounded-[14px] bg-surface hairline">
+        <div className="sheet overflow-x-auto rounded-[6px]">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead className="text-[11px] uppercase tracking-[0.12em] text-muted">
               <tr>
@@ -26,7 +26,7 @@ export default async function CustomersPage() {
             </thead>
             <tbody>
               {customers.map((customer) => (
-                <tr key={customer.id} className="border-t">
+                <tr key={customer.id} className="row-ink border-t">
                   <td className="px-4 py-3">
                     {customer.latestDisputeId ? (
                       <PeekLink id={customer.latestDisputeId} className="font-medium text-cyan">

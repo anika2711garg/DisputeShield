@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+function blank(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
+}
+
 const envSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().optional().default("http://localhost:3000"),
   NEXT_PUBLIC_SUPABASE_URL: z.string().optional().default(""),
@@ -7,7 +12,7 @@ const envSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional().default(""),
   OPENAI_API_KEY: z.string().optional().default(""),
   OPENAI_MODEL: z.string().optional().default("gpt-4.1-mini"),
-  RAZORPAY_MODE: z.enum(["mock", "test", "live"]).optional().default("mock"),
+  RAZORPAY_MODE: z.enum(["mock", "test", "live"]).catch("mock"),
   RAZORPAY_KEY_ID: z.string().optional().default(""),
   RAZORPAY_KEY_SECRET: z.string().optional().default(""),
   RAZORPAY_WEBHOOK_SECRET: z.string().optional().default(""),
@@ -18,22 +23,26 @@ const envSchema = z.object({
 
 export type AppEnv = z.infer<typeof envSchema>;
 
-function readEnv(): AppEnv {
+export function parseEnv(source: Record<string, string | undefined> = process.env): AppEnv {
   return envSchema.parse({
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    OPENAI_MODEL: process.env.OPENAI_MODEL,
-    RAZORPAY_MODE: process.env.RAZORPAY_MODE,
-    RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID,
-    RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
-    RAZORPAY_WEBHOOK_SECRET: process.env.RAZORPAY_WEBHOOK_SECRET,
-    ENABLE_RAZORPAY_WRITES: process.env.ENABLE_RAZORPAY_WRITES,
-    CRON_SECRET: process.env.CRON_SECRET,
-    DEMO_AUTH_SECRET: process.env.DEMO_AUTH_SECRET,
+    NEXT_PUBLIC_APP_URL: blank(source.NEXT_PUBLIC_APP_URL),
+    NEXT_PUBLIC_SUPABASE_URL: blank(source.NEXT_PUBLIC_SUPABASE_URL),
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: blank(source.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY),
+    SUPABASE_SERVICE_ROLE_KEY: blank(source.SUPABASE_SERVICE_ROLE_KEY),
+    OPENAI_API_KEY: blank(source.OPENAI_API_KEY),
+    OPENAI_MODEL: blank(source.OPENAI_MODEL),
+    RAZORPAY_MODE: blank(source.RAZORPAY_MODE),
+    RAZORPAY_KEY_ID: blank(source.RAZORPAY_KEY_ID),
+    RAZORPAY_KEY_SECRET: blank(source.RAZORPAY_KEY_SECRET),
+    RAZORPAY_WEBHOOK_SECRET: blank(source.RAZORPAY_WEBHOOK_SECRET),
+    ENABLE_RAZORPAY_WRITES: blank(source.ENABLE_RAZORPAY_WRITES),
+    CRON_SECRET: blank(source.CRON_SECRET),
+    DEMO_AUTH_SECRET: blank(source.DEMO_AUTH_SECRET),
   });
+}
+
+function readEnv(): AppEnv {
+  return parseEnv(process.env);
 }
 
 let cached: AppEnv | null = null;

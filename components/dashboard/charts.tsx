@@ -6,9 +6,9 @@ import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
 import { Card } from "@/components/ui/card";
 
 const tooltipStyle = {
-  background: "#fff",
-  border: "1px solid #e2e8f0",
-  borderRadius: 10,
+  background: "#fff8ee",
+  border: "1px solid #c9b89a",
+  borderRadius: 4,
   fontSize: 12,
 };
 
@@ -72,7 +72,7 @@ export function DashboardCharts({
         </ResponsiveContainer>
       </ChartCard>
       <Card>
-        <h3 className="mb-4 text-[13px] text-muted">Contest / accept / pending · human escalation {escalation}%</h3>
+        <h3 className="hand mb-4 text-xl text-violet">contest funnel · human {escalation}%</h3>
         <div className="space-y-3">
           {funnel.map((item, index) => (
             <div key={item.name}>
@@ -100,7 +100,7 @@ function ChartCard({ title, children }: { title: string; children: ReactNode }) 
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <Card>
-        <h3 className="mb-4 text-[13px] text-muted">{title}</h3>
+        <h3 className="hand mb-4 text-xl text-violet">{title}</h3>
         <div className="h-56">{children}</div>
       </Card>
     </motion.div>

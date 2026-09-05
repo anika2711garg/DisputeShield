@@ -22,7 +22,7 @@ export function ConfirmDecisionDialog({
   const destructive = action === "accept";
   return (
     <motion.div
-      className="fixed inset-0 z-50 grid place-items-center bg-slate-900/45 p-4"
+      className="fixed inset-0 z-50 grid place-items-center bg-[#241c14]/40 p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="decision-title"
@@ -34,7 +34,7 @@ export function ConfirmDecisionDialog({
         initial={{ opacity: 0, y: 16, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-md rounded-[16px] bg-surface p-6 shadow-[var(--shadow)]"
+        className="sheet w-full max-w-md rounded-[6px] p-6"
       >
         <h3 id="decision-title" className={`text-lg font-semibold ${destructive ? "text-danger" : ""}`}>
           {destructive ? "Accept this dispute?" : "Contest this chargeback?"}
@@ -45,7 +45,7 @@ export function ConfirmDecisionDialog({
         <p className="mt-2 text-sm">
           {caseId} · {formatInr(amount)}
         </p>
-        <div className="mt-4 rounded-[10px] bg-amber/8 px-3 py-2 text-xs font-medium text-amber">
+        <div className="ticket mt-4 rounded-[4px] bg-amber/8 px-3 py-2 text-xs font-medium text-amber">
           Razorpay writes disabled — demo action only
         </div>
         <p className="mt-2 text-xs text-muted">Simulation mode. No financial mutation is sent to Razorpay.</p>

@@ -23,13 +23,13 @@ export function PayloadPreview({ disputeId }: { disputeId: string }) {
   }, [disputeId]);
 
   if (!data) {
-    return <div className="rounded-[14px] bg-surface p-4 text-sm text-muted hairline">Loading Razorpay contest payload…</div>;
+    return <div className="sheet rounded-[6px] p-4 text-sm text-muted">Loading Razorpay contest payload…</div>;
   }
 
   const json = JSON.stringify(data.body, null, 2);
 
   return (
-    <section className="rounded-[14px] bg-[#101828] p-4 text-white">
+    <section className="sheet flutter rounded-[6px] bg-[#241c14] p-4 text-[#f4ead8]">
       <div className="flex items-center justify-between gap-2">
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-cyan-300">Razorpay contest payload</div>

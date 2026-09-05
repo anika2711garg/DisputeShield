@@ -86,11 +86,32 @@ Playwright reuses the running Next server (this repo only allows one `next dev`)
 
 Next.js 16.3 · React · TypeScript · Tailwind · Motion · Recharts · Zod · OpenAI Responses API · Razorpay adapters · JSON store (Supabase schema ready, unused) · Vitest · Playwright
 
-Use npm. The `packageManager` field still mentions pnpm.
+Use npm (`package-lock.json`). Node 20+.
 
 ## AI usage
 
 AI interprets messy conversations and writes a summary. It does **not** query SQL, compute refunds, verify webhooks, or submit contests.
+
+## Deploy
+
+```bash
+npm ci
+npm run build
+npm start
+```
+
+Set these on the host (do not commit `.env.local`):
+
+- `DEMO_AUTH_SECRET` — required, not the example value
+- `NEXT_PUBLIC_APP_URL` — the public HTTPS URL
+- `RAZORPAY_MODE=mock` until you add test keys
+- `ENABLE_RAZORPAY_WRITES=false`
+
+The JSON desk writes to `.data/store.json`. On a read-only host (Vercel, some containers) it falls back to `/tmp` so the first request still seeds the demo. That file is per-instance and not a shared database.
+
+This repo root is the Next.js app. On Vercel: Import `anika2711garg/DisputeShield`, Framework Preset Next.js, Node 20. `vercel.json` already runs `npm ci`.
+
+Point any other host at this folder (where `package.json` lives).
 
 ## Known limitations
 

@@ -30,7 +30,7 @@ export function EvidenceUpload({ disputeId }: { disputeId: string }) {
 
   return (
     <div
-      className={`rounded-2xl border border-dashed p-5 ${drag ? "border-cyan bg-cyan/5" : "border-[var(--border)]"}`}
+      className={`sheet rounded-[6px] border border-dashed p-5 ${drag ? "border-cyan bg-cyan/5" : "border-[var(--border)]"}`}
       onDragOver={(event) => {
         event.preventDefault();
         setDrag(true);

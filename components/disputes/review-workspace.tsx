@@ -85,17 +85,17 @@ export function ReviewWorkspace({ bundle, role }: { bundle: CaseBundle; role: Us
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Review workspace</h1>
+        <h1 className="display text-3xl italic">Review workspace</h1>
         <p className="text-muted">{bundle.dispute.id} · {formatInr(bundle.dispute.amount)}</p>
       </div>
       <div className="grid gap-4 xl:grid-cols-[260px_1fr_320px]">
-        <aside className="space-y-3 rounded-[14px] bg-surface p-4 hairline">
+        <aside className="sheet flutter space-y-3 rounded-[6px] p-4">
           <div className="text-xs uppercase text-muted">Case</div>
           <div>{bundle.customer?.name}</div>
           <div className="text-sm text-muted">{bundle.order?.externalId}</div>
           <div className="text-sm">{bundle.shipment ? `${bundle.shipment.status} · ${bundle.shipment.trackingId}` : "No shipment"}</div>
         </aside>
-        <section className="rounded-2xl bg-surface p-5 hairline">
+        <section className="sheet flutter rounded-[6px] p-5">
           <EvidenceUpload disputeId={bundle.dispute.id} />
           {current ? (
             <>
@@ -120,7 +120,7 @@ export function ReviewWorkspace({ bundle, role }: { bundle: CaseBundle; role: Us
             <p>Select evidence.</p>
           )}
         </section>
-        <aside className="rounded-2xl bg-surface p-4 hairline">
+        <aside className="sheet flutter rounded-[6px] p-4">
           <div className="text-xs uppercase text-muted">Contest package</div>
           <div className="mt-2 text-sm">{selected.length} documents selected</div>
           <div className="mt-1 text-sm">Recommendation: {bundle.recommendation?.finalRecommendation}</div>
@@ -146,7 +146,7 @@ export function ReviewWorkspace({ bundle, role }: { bundle: CaseBundle; role: Us
           </div>
         </aside>
       </div>
-      <div className="sticky bottom-3 space-y-3 rounded-[14px] bg-surface p-4 hairline">
+      <div className="sheet sticky bottom-3 space-y-3 rounded-[6px] p-4">
         <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted">Final decision</div>
         <label className="flex items-start gap-2 text-sm">
           <input type="checkbox" className="mt-1" checked={ack} onChange={(e) => setAck(e.target.checked)} />
@@ -172,13 +172,13 @@ export function ReviewWorkspace({ bundle, role }: { bundle: CaseBundle; role: Us
       )}
 
       {acceptOpen && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/45 p-4">
-          <div className="w-full max-w-md rounded-[16px] bg-surface p-6 shadow-[var(--shadow)]">
+        <div className="fixed inset-0 z-50 grid place-items-center bg-[#241c14]/40 p-4">
+          <div className="sheet w-full max-w-md rounded-[6px] p-6">
             <h3 className="text-lg font-semibold text-danger">Accept this dispute?</h3>
             <p className="mt-3 text-sm text-muted">DisputeShield will not take this action automatically. You are making the final decision.</p>
             <p className="mt-2 text-sm">Type ACCEPT to continue. {formatInr(bundle.dispute.amount)}</p>
-            <input className="mt-4 h-10 w-full rounded-[10px] bg-white px-3 hairline" value={typed} onChange={(e) => setTyped(e.target.value)} />
-            <div className="mt-4 rounded-[10px] bg-amber/8 px-3 py-2 text-xs font-medium text-amber">Razorpay writes disabled — demo action only</div>
+            <input className="mt-4 h-10 w-full rounded-[4px] bg-white px-3 hairline" value={typed} onChange={(e) => setTyped(e.target.value)} />
+            <div className="ticket mt-4 rounded-[4px] bg-amber/8 px-3 py-2 text-xs font-medium text-amber">Razorpay writes disabled — demo action only</div>
             <div className="mt-6 flex justify-end gap-2">
               <Button variant="secondary" onClick={() => setAcceptOpen(false)}>Cancel</Button>
               <Button variant="danger" disabled={typed !== "ACCEPT"} onClick={accept}>Accept Dispute</Button>

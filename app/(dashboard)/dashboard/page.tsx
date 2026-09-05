@@ -30,7 +30,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Command centre"
+        eyebrow="this morning's desk"
         title="Amount at risk, right now"
         description="Prioritize files that can still be contested before the processor deadline. AI investigates. Humans decide."
       />
@@ -48,16 +48,16 @@ export default async function DashboardPage() {
         <MetricCard delay={0.26} label="Unassigned" value={String(metrics.unassigned)} hint="Open the assignment queue" tone="amber" peek="Open files with no reviewer owner. Claim next picks the earliest deadline." />
       </div>
       <div className="flex flex-wrap gap-2">
-        <Link href="/queue" className="rounded-[10px] bg-surface px-3 py-2 text-sm hairline">
+        <Link href="/queue" className="ticket rounded-[4px] px-3 py-2 text-sm">
           Assignment queue
         </Link>
-        <Link href="/webhooks" className="rounded-[10px] bg-surface px-3 py-2 text-sm hairline">
+        <Link href="/webhooks" className="ticket rounded-[4px] px-3 py-2 text-sm">
           Razorpay webhooks
         </Link>
-        <Link href="/lab" className="rounded-[10px] bg-surface px-3 py-2 text-sm hairline">
+        <Link href="/lab" className="ticket rounded-[4px] px-3 py-2 text-sm">
           Threshold lab
         </Link>
-        <Link href="/disputes?view=disagreement" className="rounded-[10px] bg-surface px-3 py-2 text-sm hairline">
+        <Link href="/disputes?view=disagreement" className="ticket rounded-[4px] px-3 py-2 text-sm">
           Review disagreements
         </Link>
       </div>
@@ -77,9 +77,9 @@ export default async function DashboardPage() {
       />
 
       <div className="grid gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
-        <Card className="bg-gradient-to-br from-amber/10 to-surface">
+        <Card className="flutter bg-gradient-to-br from-amber/10 to-surface">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-medium">Priority queue</h2>
+            <h2 className="hand text-xl text-violet">priority queue</h2>
             <Link href="/disputes?view=needs-attention" className="text-sm text-electric">
               Open queue
             </Link>
@@ -103,7 +103,7 @@ export default async function DashboardPage() {
                     rules: item.recommendation?.rulesRecommendation,
                   }}
                 >
-                  <Link href={`/disputes/${item.id}`} className="flex items-center justify-between rounded-[10px] px-2.5 py-2 hover:bg-surface">
+                  <Link href={`/disputes/${item.id}`} className="row-ink flex items-center justify-between rounded-[4px] px-2.5 py-2">
                     <div>
                       <div className="text-sm font-medium">{item.customer?.name ?? item.id}</div>
                       <div className="text-xs text-muted">{formatInr(item.amount)} · {item.reasonDescription}</div>
@@ -118,15 +118,15 @@ export default async function DashboardPage() {
             })}
           </div>
         </Card>
-        <Card>
+        <Card className="flutter">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-medium">Recent investigations</h2>
+            <h2 className="hand text-xl text-violet">recent files</h2>
             <Link href="/disputes" className="text-sm text-electric">
               View all
             </Link>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] text-left text-sm">
+            <table className="ledger w-full min-w-[640px] text-left text-sm">
               <thead className="sticky top-0 text-[10px] uppercase tracking-[0.14em] text-muted">
                 <tr>
                   <th className="py-2">Case</th>
@@ -146,7 +146,7 @@ export default async function DashboardPage() {
                     recommendation: item.recommendation?.finalRecommendation,
                   });
                   return (
-                    <tr key={item.id} className="border-t transition hover:bg-sunken/70">
+                    <tr key={item.id} className="row-ink border-t">
                       <td className="py-2.5">
                         <div className="flex items-center gap-1">
                           <PeekButton

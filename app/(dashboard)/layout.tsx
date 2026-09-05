@@ -6,6 +6,8 @@ import { razorpayRuntimeLabel } from "@/lib/razorpay/client";
 import { razorpayWritesEnabled } from "@/lib/env";
 import { getWorkspaceSettings } from "@/lib/services/settings-service";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getSessionUser();
   if (!user) redirect("/login");

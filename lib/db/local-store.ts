@@ -1,6 +1,7 @@
 import "server-only";
 
 import { existsSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, writeFileSync } from "fs";
+import { tmpdir } from "os";
 import path from "path";
 import { buildDemoStore } from "@/lib/demo/seed-data";
 import { HERO_DISPUTE_ID, USERS } from "@/lib/demo/constants";
@@ -11,32 +12,66 @@ import { DEFAULT_WORKSPACE_SETTINGS, type AppStore } from "@/types/domain";
 const DATA_DIR = path.join(process.cwd(), ".data");
 const STORE_PATH = path.join(DATA_DIR, "store.json");
 
+let fallbackPath: string | null = null;
 let memory: AppStore | null = null;
 let memoryMtime = 0;
 
-function fileMtime(): number {
-  return existsSync(STORE_PATH) ? statSync(STORE_PATH).mtimeMs : 0;
+function activePath(): string {
+  return process.env.DS_STORE_PATH || fallbackPath || STORE_PATH;
+}
+
+function fileMtime(file: string): number {
+  try {
+    return existsSync(file) ? statSync(file).mtimeMs : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function writeJson(file: string, store: AppStore): void {
+  mkdirSync(path.dirname(file), { recursive: true });
+  const tmp = `${file}.tmp`;
+  writeFileSync(tmp, JSON.stringify(store), "utf8");
+  try {
+    renameSync(tmp, file);
+  } catch {
+    writeFileSync(file, JSON.stringify(store), "utf8");
+    if (existsSync(tmp)) unlinkSync(tmp);
+  }
 }
 
 function persist(store: AppStore): void {
-  mkdirSync(DATA_DIR, { recursive: true });
-  const tmp = `${STORE_PATH}.tmp`;
-  writeFileSync(tmp, JSON.stringify(store), "utf8");
-  try {
-    renameSync(tmp, STORE_PATH);
-  } catch {
-    writeFileSync(STORE_PATH, JSON.stringify(store), "utf8");
-    if (existsSync(tmp)) unlinkSync(tmp);
-  }
   memory = store;
-  memoryMtime = fileMtime();
+  try {
+    writeJson(activePath(), store);
+    memoryMtime = fileMtime(activePath());
+  } catch {
+    try {
+      const fallback = path.join(tmpdir(), "disputeshield", "store.json");
+      writeJson(/* turbopackIgnore: true */ fallback, store);
+      fallbackPath = fallback;
+      memoryMtime = Date.now();
+    } catch {
+      memoryMtime = Date.now();
+    }
+  }
+}
+
+function readJson(file: string): AppStore | null {
+  try {
+    if (!existsSync(file)) return null;
+    return JSON.parse(readFileSync(file, "utf8")) as AppStore;
+  } catch {
+    return null;
+  }
 }
 
 export function getStore(): AppStore {
-  const mtime = fileMtime();
+  const file = activePath();
+  const mtime = fileMtime(file);
   if (memory && mtime === memoryMtime) return memory;
-  if (existsSync(STORE_PATH)) {
-    const parsed = JSON.parse(readFileSync(STORE_PATH, "utf8")) as AppStore;
+  const parsed = readJson(file);
+  if (parsed) {
     const hadPlain = (parsed.profiles ?? []).some((item) => item.password && !isHashedPassword(item.password));
     memory = hydrateStore(parsed);
     const shifted = rebaseOpenDeadlines(memory);

@@ -29,25 +29,25 @@ export default async function SettingsPage() {
       <SettingsControls settings={settings} razorpay={razorpay} />
       {canManageTeam(user.role) && <OpsPanel />}
       <div className="flex flex-wrap gap-3">
-        <Link href="/settings/password" className="rounded-[10px] bg-white px-4 py-2 text-sm hairline">
+        <Link href="/settings/password" className="ticket rounded-[4px] px-4 py-2 text-sm">
           Password
         </Link>
-        <Link href="/settings/integrations" className="rounded-[10px] bg-white px-4 py-2 text-sm hairline">
+        <Link href="/settings/integrations" className="ticket rounded-[4px] px-4 py-2 text-sm">
           Integrations
         </Link>
-        <Link href="/settings/team" className="rounded-[10px] bg-white px-4 py-2 text-sm hairline">
+        <Link href="/settings/team" className="ticket rounded-[4px] px-4 py-2 text-sm">
           Team
         </Link>
-        <Link href="/lab" className="rounded-[10px] bg-white px-4 py-2 text-sm hairline">
+        <Link href="/lab" className="ticket rounded-[4px] px-4 py-2 text-sm">
           Rules lab
         </Link>
-        <Link href="/webhooks" className="rounded-[10px] bg-white px-4 py-2 text-sm hairline">
+        <Link href="/webhooks" className="ticket rounded-[4px] px-4 py-2 text-sm">
           Webhook inbox
         </Link>
-        <FileDownload href="/api/disputes/export" className="rounded-[10px] bg-white px-4 py-2 text-sm hairline">
+        <FileDownload href="/api/disputes/export" className="ticket rounded-[4px] px-4 py-2 text-sm">
           Export disputes CSV
         </FileDownload>
-        <FileDownload href="/api/activity/export" className="rounded-[10px] bg-white px-4 py-2 text-sm hairline">
+        <FileDownload href="/api/activity/export" className="ticket rounded-[4px] px-4 py-2 text-sm">
           Export audit CSV
         </FileDownload>
       </div>

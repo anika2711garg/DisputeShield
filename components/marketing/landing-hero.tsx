@@ -3,41 +3,53 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
-import { Reveal } from "@/components/motion/primitives";
+import { HandNote, InkHeadline, Reveal, Stamp } from "@/components/motion/primitives";
 
 export function LandingHero() {
   return (
-    <section className="aurora mx-auto max-w-6xl px-6 pb-12 pt-8">
+    <section className="aurora relative mx-auto max-w-6xl px-6 pb-12 pt-10">
+      <span className="clip" aria-hidden />
       <Reveal>
-        <p className="relative z-10 text-[12px] font-semibold uppercase tracking-[0.22em] text-violet">DisputeShield</p>
+        <p className="relative z-10 text-[11px] font-bold uppercase tracking-[0.28em] text-violet">Desk file · Northstar</p>
       </Reveal>
-      <motion.h1
-        className="relative z-10 mt-4 max-w-3xl text-5xl font-semibold tracking-tight md:text-6xl"
-        initial={{ opacity: 0, y: 22 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-      >
-        AI <span className="gradient-text">investigates.</span>
-        <br />
-        <span className="text-foreground">Humans decide.</span>
-      </motion.h1>
-      <Reveal delay={0.16} className="relative z-10">
-        <p className="mt-5 max-w-2xl text-lg leading-7 text-muted">
-          Turn scattered payment, delivery, and customer evidence into a review-ready dispute case — without giving AI control of the final decision.
+      <InkHeadline
+        className="relative z-10 mt-4 max-w-4xl text-5xl leading-[0.95] md:text-7xl"
+        lines={[
+          <span key="a" className="display italic">
+            AI <span className="gradient-text not-italic scribble">investigates.</span>
+          </span>,
+          <span key="b" className="display">
+            Humans still decide.
+          </span>,
+        ]}
+      />
+      <HandNote className="hand relative z-10 mt-3 ml-1 text-2xl text-violet md:ml-8" rotate={-7} delay={0.55}>
+        (the model never clicks Contest)
+      </HandNote>
+      <Reveal delay={0.28} className="relative z-10">
+        <p className="mt-5 max-w-xl text-lg leading-8 text-muted">
+          A chargeback desk that feels like a paper file on a lamp-lit table — payment, courier, and the messy chat in one place. You still sign the last line.
         </p>
       </Reveal>
       <motion.div
-        className="relative z-10 mt-8 flex flex-wrap gap-3"
-        initial={{ opacity: 0, y: 12 }}
+        className="relative z-10 mt-8 flex flex-wrap items-center gap-3"
+        initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.24, duration: 0.4 }}
+        transition={{ delay: 0.36, duration: 0.45 }}
       >
-        <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-[9px] bg-primary px-5 py-3 text-sm font-medium text-white shadow-[0_8px_20px_rgba(79,70,229,0.25)] transition hover:translate-y-[-1px]">
-          Explore live demo <ArrowRight className="size-4" />
+        <Link
+          href="/dashboard"
+          className="press group inline-flex items-center gap-2 rounded-[4px] bg-primary px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(12,79,71,0.28)]"
+        >
+          Open the live desk
+          <ArrowRight className="size-4 transition group-hover:translate-x-1" />
         </Link>
-        <Link href="/disputes/disp_hero_macbook" className="rounded-[9px] bg-surface px-5 py-3 text-sm hairline transition hover:-translate-y-0.5">
-          View ₹60K hero case
+        <Link href="/disputes/disp_hero_macbook" className="ticket ink-underline rounded-[4px] px-5 py-3 text-sm">
+          ₹60,000 MacBook file
         </Link>
+        <Stamp delay={0.7} className="stamp ml-2 hidden sm:inline-flex">
+          Human gate
+        </Stamp>
       </motion.div>
     </section>
   );

@@ -33,7 +33,8 @@ export default async function AnalyticsPage({
               <Link
                 key={id}
                 href={`/analytics?range=${id}`}
-                className={`rounded-full px-3 py-1 text-xs hairline ${range === id ? "bg-cyan text-white" : "bg-white"}`}
+                data-active={range === id ? "true" : "false"}
+                className="paper-tab rounded-[4px] px-3 py-1 text-xs"
               >
                 {label}
               </Link>

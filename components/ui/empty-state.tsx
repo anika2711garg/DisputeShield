@@ -14,9 +14,9 @@ export function EmptyState({
   className?: string;
 }) {
   return (
-    <div className={cn("grid place-items-center rounded-[14px] bg-surface px-6 py-16 text-center hairline", className)}>
+    <div className={cn("sheet grid place-items-center rounded-[6px] px-6 py-16 text-center", className)}>
       <Inbox className="size-8 text-muted" aria-hidden />
-      <h2 className="mt-4 text-lg font-semibold">{title}</h2>
+      <h2 className="display mt-4 text-2xl italic">{title}</h2>
       <p className="mt-2 max-w-md text-sm text-muted">{body}</p>
       {action && <div className="mt-5">{action}</div>}
     </div>

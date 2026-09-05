@@ -16,7 +16,7 @@ const CARDS = [
     title: "₹60,000 MacBook Air",
     body: "Product not received. BlueDart + chat acknowledgement. Strong evidence.",
     json: { event: "payment.dispute.created", amount: 6000000, reason: "product_not_received" },
-    theme: "from-emerald-50 to-white",
+    theme: "from-emerald/10 to-surface",
   },
   {
     id: "weak",
@@ -24,7 +24,7 @@ const CARDS = [
     title: "Thin shipping evidence",
     body: "Rules should push this to human review.",
     json: { event: "payment.dispute.created", amount: 1500000, reason: "product_not_received" },
-    theme: "from-amber-50 to-white",
+    theme: "from-amber/10 to-surface",
   },
   {
     id: "random",
@@ -32,7 +32,7 @@ const CARDS = [
     title: "Unrecognized transaction",
     body: "Random replay for a high-risk claim pattern.",
     json: { event: "payment.dispute.action_required", reason: "transaction_not_recognised" },
-    theme: "from-red-50 to-white",
+    theme: "from-danger/10 to-surface",
   },
   {
     id: "service",
@@ -61,15 +61,15 @@ export function DemoCenter() {
       {CARDS.map((card) => (
         <StaggerItem key={card.id}>
         <motion.article
-          whileHover={{ y: -4, scale: 1.01 }}
-          transition={{ type: "spring", stiffness: 280, damping: 20 }}
-          className={cn("rounded-[14px] bg-gradient-to-br p-5 hairline", card.theme, busy === card.id && "scan-ai")}
+          whileHover={{ y: -6, rotate: -0.8, scale: 1.01 }}
+          transition={{ type: "spring", stiffness: 280, damping: 16 }}
+          className={cn("sheet flutter rounded-[6px] bg-gradient-to-br p-5", card.theme, busy === card.id && "scan-ai")}
         >
           <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber">Webhook-shaped demo event</div>
           <div className="mt-2 text-xs font-medium text-violet">{card.kicker}</div>
-          <h2 className="mt-1 text-lg font-semibold">{card.title}</h2>
+          <h2 className="display mt-1 text-2xl italic">{card.title}</h2>
           <p className="mt-1 text-sm text-muted">{card.body}</p>
-          <pre className="mt-3 overflow-auto rounded-[10px] bg-[#101828] p-3 text-[11px] text-slate-200">
+          <pre className="mt-3 overflow-auto rounded-[4px] bg-[#241c14] p-3 text-[11px] text-[#f4ead8]">
             {JSON.stringify(card.json, null, 2)}
           </pre>
           <Button

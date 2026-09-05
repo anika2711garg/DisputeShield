@@ -32,7 +32,7 @@ export function EvidenceGraph({
         <h3 className="text-[13px] font-medium text-muted">Evidence graph</h3>
         <span className="text-[11px] text-muted">Verified sources · strength on each node</span>
       </div>
-      <div className="h-[380px] overflow-hidden rounded-[14px] bg-white hairline md:h-[420px]">
+      <div className="h-[380px] overflow-hidden rounded-[6px] bg-white hairline md:h-[420px]">
         <ReactFlow
           nodes={nodes}
           edges={edges}

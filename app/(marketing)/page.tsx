@@ -5,19 +5,19 @@ import { BrandLogo } from "@/components/brand/logo";
 import { ThemeSwitch } from "@/components/layout/theme-switch";
 import { LandingFlow } from "@/components/marketing/landing-flow";
 import { LandingHero } from "@/components/marketing/landing-hero";
-import { Reveal, Stagger, StaggerItem } from "@/components/motion/primitives";
+import { HandNote, Reveal, Stagger, StaggerItem, TiltCard } from "@/components/motion/primitives";
 
 export default function LandingPage() {
   return (
-    <div className="app-grid min-h-screen text-foreground">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <BrandLogo size={32} />
+    <div className="app-grid relative min-h-screen overflow-hidden text-foreground">
+      <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <BrandLogo size={34} />
         <div className="flex items-center gap-3">
           <ThemeSwitch />
-          <Link href="/login" className="rounded-[9px] px-4 py-2 text-sm text-muted transition hover:-translate-y-0.5 hover:text-foreground">
+          <Link href="/login" className="ink-underline px-3 py-2 text-sm text-muted">
             Sign in
           </Link>
-          <Link href="/dashboard" className="rounded-[9px] bg-primary px-4 py-2 text-sm font-medium text-white shadow-[0_8px_20px_rgba(15,92,84,0.25)] transition hover:-translate-y-0.5">
+          <Link href="/dashboard" className="press rounded-[4px] bg-primary px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_18px_rgba(12,79,71,0.25)]">
             Explore live demo
           </Link>
         </div>
@@ -25,72 +25,83 @@ export default function LandingPage() {
 
       <LandingHero />
 
-      <section className="mx-auto max-w-6xl px-6 pb-14">
+      <section className="relative z-10 mx-auto max-w-6xl px-6 pb-14">
         <LandingFlow />
       </section>
 
-      <Stagger className="mx-auto grid max-w-6xl gap-4 px-6 pb-14 md:grid-cols-2">
+      <Stagger className="relative z-10 mx-auto grid max-w-6xl gap-5 px-6 pb-14 md:grid-cols-2">
         <StaggerItem>
-        <Shot title="Investigation workspace" caption="₹60,000 MacBook · score 92 · contest recommended" accent="from-violet/10">
-          <div className="flex items-center gap-4">
-            <div className="glow-ring grid size-16 place-items-center rounded-full border-4 border-emerald text-sm font-semibold text-emerald">92</div>
-            <div className="text-sm">
-              Strong evidence
-              <div className="mt-1 font-medium">Contest · pending human review</div>
-            </div>
-          </div>
-        </Shot>
+          <TiltCard>
+            <Shot title="Investigation workspace" caption="Rahul Sharma · MacBook Air · score 92" accent="from-violet/10">
+              <div className="flex items-center gap-4">
+                <div className="glow-ring grid size-16 place-items-center rounded-full border-[3px] border-emerald text-sm font-semibold text-emerald">92</div>
+                <div className="text-sm">
+                  Strong merchant package
+                  <div className="mt-1 font-medium">Contest is only a recommendation</div>
+                </div>
+              </div>
+            </Shot>
+          </TiltCard>
         </StaggerItem>
         <StaggerItem>
-        <Shot title="Evidence graph" caption="Payment → Invoice → Delivery → Chat" accent="from-cyan/10">
-          <div className="grid grid-cols-3 gap-2 text-[11px]">
-            {[
-              ["Payment", "bg-primary/10 text-primary"],
-              ["Order", "bg-electric/10 text-electric"],
-              ["Invoice", "bg-cyan/10 text-cyan"],
-              ["Shipment", "bg-teal/10 text-teal"],
-              ["Delivery", "bg-emerald/10 text-emerald"],
-              ["Chat", "bg-violet/10 text-violet"],
-            ].map(([item, cls]) => (
-              <div key={item} className={`rounded-lg px-2 py-2 ${cls}`}>{item}</div>
-            ))}
-          </div>
-        </Shot>
+          <TiltCard>
+            <Shot title="Evidence graph" caption="Payment → invoice → BlueDart → chat" accent="from-cyan/10">
+              <div className="grid grid-cols-3 gap-2 text-[11px]">
+                {[
+                  ["Payment", "bg-primary/10 text-primary"],
+                  ["Order", "bg-electric/10 text-electric"],
+                  ["Invoice", "bg-cyan/10 text-cyan"],
+                  ["Shipment", "bg-teal/10 text-teal"],
+                  ["Delivery", "bg-emerald/10 text-emerald"],
+                  ["Chat", "bg-violet/10 text-violet"],
+                ].map(([item, cls]) => (
+                  <div key={item} className={`ticket rounded-[3px] px-2 py-2 ${cls}`}>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </Shot>
+          </TiltCard>
         </StaggerItem>
       </Stagger>
 
-      <Stagger className="mx-auto grid max-w-6xl gap-4 px-6 pb-14 md:grid-cols-3" delay={0.08}>
+      <Stagger className="relative z-10 mx-auto grid max-w-6xl gap-4 px-6 pb-14 md:grid-cols-3" delay={0.08}>
         {[
-          ["01 Collect", "Payment, order, invoice, tracking, delivery and customer communication.", "bg-cyan/10"],
-          ["02 Investigate", "Rules score structured evidence. AI interprets messy conversations.", "bg-violet/10"],
-          ["03 Decide", "A human reviewer must Contest or Accept. The model never submits.", "bg-primary/10"],
-        ].map(([title, copy, bg]) => (
+          ["01 Collect", "Payment, invoice, tracking, delivery, and the messy chat thread."],
+          ["02 Investigate", "Rules score the file. AI only reads the conversation."],
+          ["03 Decide", "A reviewer contests or accepts. The model never submits."],
+        ].map(([title, copy]) => (
           <StaggerItem key={title}>
-          <div className={`rounded-[14px] ${bg} p-5 hairline lift`}>
-            <div className="text-sm font-semibold text-primary">{title}</div>
-            <p className="mt-2 text-sm text-muted">{copy}</p>
-          </div>
+            <TiltCard>
+              <div className="sheet flutter rounded-[6px] p-5">
+                <div className="display text-xl italic text-primary">{title}</div>
+                <p className="mt-2 text-sm leading-6 text-muted">{copy}</p>
+              </div>
+            </TiltCard>
           </StaggerItem>
         ))}
       </Stagger>
 
-      <section className="mx-auto max-w-6xl px-6 pb-20">
+      <section className="relative z-10 mx-auto max-w-6xl px-6 pb-20">
         <Reveal>
-        <div className="decision-glow rounded-[20px] bg-[#101828] p-8 text-white md:p-10">
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-full bg-white/8">
-              <Lock className="size-5 text-cyan-300" />
-            </span>
-            <div>
-              <h2 className="text-2xl font-semibold">Human decision principle</h2>
-              <p className="mt-1 text-sm text-slate-400">AI and rules recommend. Only a reviewer can move money.</p>
+          <div className="decision-glow relative rounded-[8px] bg-[#241c14] p-8 text-[#f4ead8] md:p-10">
+            <span className="stamp absolute -right-1 top-8 hidden sm:inline-flex">Signed</span>
+            <div className="flex items-center gap-3">
+              <span className="grid size-11 place-items-center rounded-full bg-white/8">
+                <Lock className="size-5 text-amber-200" />
+              </span>
+              <div>
+                <h2 className="display text-3xl italic">The human still signs</h2>
+                <HandNote className="hand mt-1 text-xl text-amber-200/80" rotate={-4} delay={0.2}>
+                  leave a coffee ring if you must — not a machine
+                </HandNote>
+              </div>
+            </div>
+            <div className="mt-8 grid gap-6 md:grid-cols-2">
+              <Trust title="AI can" good items={["summarize chats", "spot contradictions", "explain evidence"]} />
+              <Trust title="AI cannot" good={false} items={["score the file", "verify webhooks", "query SQL", "submit contests", "move money"]} />
             </div>
           </div>
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            <Trust title="AI can" good items={["summarize chats", "identify contradictions", "explain evidence"]} />
-            <Trust title="AI cannot" good={false} items={["calculate evidence scores", "verify Razorpay webhooks", "query SQL", "submit contests", "move money"]} />
-          </div>
-        </div>
         </Reveal>
       </section>
     </div>
@@ -99,8 +110,8 @@ export default function LandingPage() {
 
 function Shot({ title, caption, children, accent }: { title: string; caption: string; children: ReactNode; accent: string }) {
   return (
-    <div className={`rounded-[14px] bg-gradient-to-br ${accent} to-surface p-5 hairline lift`}>
-      <div className="mb-3 text-xs text-muted">{title}</div>
+    <div className={`sheet flutter rounded-[6px] bg-gradient-to-br ${accent} to-surface p-5`}>
+      <div className="mb-3 text-[11px] font-bold uppercase tracking-[0.16em] text-muted">{title}</div>
       {children}
       <p className="mt-3 text-xs text-muted">{caption}</p>
     </div>
@@ -110,11 +121,11 @@ function Shot({ title, caption, children, accent }: { title: string; caption: st
 function Trust({ title, items, good }: { title: string; items: string[]; good: boolean }) {
   return (
     <div>
-      <div className="text-sm font-medium">{title}</div>
-      <ul className="mt-3 space-y-2 text-sm text-slate-300">
+      <div className="text-sm font-semibold">{title}</div>
+      <ul className="mt-3 space-y-2 text-sm text-white/70">
         {items.map((item) => (
           <li key={item} className="flex items-center gap-2">
-            {good ? <Check className="size-4 text-emerald-400" /> : <X className="size-4 text-red-400" />}
+            {good ? <Check className="size-4 text-emerald-300" /> : <X className="size-4 text-red-300" />}
             {item}
           </li>
         ))}
